@@ -23,3 +23,36 @@ In the case of the image above, we had to wait quite a while to retrieve the fir
 In the case of a non-blocking call, we'd have something like this:
 
 <img src="AsyncNonBlock.png" alt="Non-Blocking Ops">
+
+You can cleary see how much faster we concluded execution. Rather than wait on API One and then wait on API Two, we could wait for both of them to complete at the same time, and acheive our results almost 50% faster. At this point, before moving into more concrete and tangible examples, it is important to mention that, for ease, the term *"Synchronous"* is generally shortened to "Sync", and the term *"Aynchronous"* is generally shortened to "Async". You will see this notation used in method/function names.
+
+### Callback Functions
+
+You might be wondering, "if we can handle a call asynchronously, how do we know when that call is finished and we have a response?" Generally, we pass in as an argument to our async method a callback function, and that method will "call back" that function at a later time with a response. I'm using ES5 functions here, but we'll update to ES6 standards later.
+
+```
+function asyncAddFunction(a, b, callback){
+  callback(a + b);
+}
+
+asyncAddFunction(2, 4, function(sum){
+  //Here we have the sum, 2 + 4 = 6.
+});
+```
+Alternativly, a callback function might take in an error object and a response object as arguments, and present them when the async function is complete. We'll see this later with Express.
+
+As an example of a synchronous call, we can use the Node.js `readFileSync(...)` method. Again, we'll be moving to ES6+ later.
+
+```
+var fs = require('fs');
+var data = fs.readFileSync('/example.txt'); // The thread will be blocked here until complete.
+```
+If we were doing this asynchronously, we'd pass in a callback function which would fire when the the async operation was complete.
+```
+var fs = require('fs');
+var data = fs.readFile('/example.txt', function(err, data){ //We'll move on for now, and this function will fire when ready.
+  if(err) return console.log('Error: ', err);
+  console.log('Data: ', data);
+}); 
+// Keep executing below, don't wait on the data.
+```
