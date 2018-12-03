@@ -14,3 +14,4 @@ So, a *synchronous* operation *blocks* a process or thread until that operation 
 
 Let's look at another example of a *synchronous* call that *blocks* a thread. Suppose we are building an application that compares the results of two Weather APIs to find their percent difference in temperature. In a blocking manner, we make a call to Weather API one, and wait for the result. Once we get a result, we call Weather API two, and wait for its result. 
 
+![alt text](https://github.com/JamieCorkhill/Node-Article-One/SyncBlock.png "Sync Blocking Ops")
