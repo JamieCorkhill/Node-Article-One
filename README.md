@@ -21,3 +21,5 @@ Allow me to note, it's important to recognize that not all synchronous calls are
 In the case of the image above, we had to wait quite a while to retrieve the first results from API One. Thereafter, we had to wait equally as long to get a response from API Two. While waiting for both responses, the user would notice our application hang, and this is bad for User Experience.
 
 In the case of a non-blocking call, we'd have something like this:
+
+<img src="AsyncNonBlock.png" alt="Non-Blocking Ops">
