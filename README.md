@@ -15,3 +15,9 @@ So, a *synchronous* operation *blocks* a process or thread until that operation 
 Let's look at another example of a *synchronous* call that *blocks* a thread. Suppose we are building an application that compares the results of two Weather APIs to find their percent difference in temperature. In a blocking manner, we make a call to Weather API one, and wait for the result. Once we get a result, we call Weather API two, and wait for its result. 
 
 <img src="SyncBlock.png" alt="Sync Blocking Ops">
+
+Allow me to note, it's important to recognize that not all synchronous calls are necessarily blocking. If a synchronous operation can manage to complete without blocking the thread or causing a wait state, it was non-blocking.
+
+In the case of the image above, we had to wait quite a while to retrieve the first results from API One. Thereafter, we had to wait equally as long to get a response from API Two. While waiting for both responses, the user would notice our application hang, and this is bad for User Experience.
+
+In the case of a non-blocking call, we'd have something like this:
