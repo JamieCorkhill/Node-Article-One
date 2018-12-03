@@ -39,7 +39,9 @@ asyncAddFunction(2, 4, function(sum){
   //Here we have the sum, 2 + 4 = 6.
 });
 ```
-Alternativly, a callback function might take in an error object and a response object as arguments, and present them when the async function is complete. We'll see this later with Express.
+Alternatively, a callback function might take in an error object and a response object as arguments, and present them when the async function is complete. We'll see this later with Express. When we called `asyncAddFunction(...)`, you'll notice we supplied a callback function for the callback parameter from the method definition. This function is an *anonymous* function (it does not have a name) and is written using the *Expression Syntax*. The method definition, on the other hand, is a function statement. It's not anonymous because it actually has a name (that being "asyncAddFunction").
+
+Some may note confusion since in the method definition, we do supply a name, that being "callback". However, the anonymous function passed in as the third parameter to `asyncAddFunction(...)` does not know about the name, and so it remains anonymous. We also can't execute that function at a later point by name, we'd have to go through the async calling function again to fire it.
 
 As an example of a synchronous call, we can use the Node.js `readFileSync(...)` method. Again, we'll be moving to ES6+ later.
 
@@ -50,9 +52,10 @@ var data = fs.readFileSync('/example.txt'); // The thread will be blocked here u
 If we were doing this asynchronously, we'd pass in a callback function which would fire when the the async operation was complete.
 ```
 var fs = require('fs');
-var data = fs.readFile('/example.txt', function(err, data){ //We'll move on for now, and this function will fire when ready.
+var data = fs.readFile('/example.txt', function(err, data){ //Move on, this will fire when ready.
   if(err) return console.log('Error: ', err);
   console.log('Data: ', data);
 }); 
 // Keep executing below, don't wait on the data.
 ```
+If you have never seen `return` used in that manner before, we are just saying to stop function execution so we don't print the data object if the error object is defined. We could also have just wrapped the log statement in an `else` clause.
