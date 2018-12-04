@@ -111,7 +111,7 @@ If Node.js was not non-blocking, we'd see the first log statement, wait 3 second
 
 It is important to note that just because you see a callback function does not necessarily mean there is an asynchronous call in the code. 
 ### Promises over Callbacks
-...
+Callbacks can quickly become messy in JavaScript, especially multiple nested callbacks. 
 ### Node APIs, the Callstack, and the Event Loop
 ...
 ### JavaScript Events
@@ -122,3 +122,4 @@ It is important to note that just because you see a callback function does not n
 ...
 ### The Node Package Manager
 ...
+### An Introduction to Mongoose
