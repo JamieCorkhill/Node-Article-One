@@ -10,9 +10,9 @@ We’ll attempt to answer all of these questions and more throughout this articl
 
 Suppose we are making a database call to retrieve properties about a user. That call is going to take time, and if the request is "blocking", then that means it will block the execution of our program until the call is complete. In this case, we made a “synchronous” request since it ended up blocking the thread.
 
-So, a *synchronous* operation *blocks* a process or thread until that operation is complete, leaving the thread in a "wait state". An *asynchronous* operation, on the other hand, is *non-blocking*. It permits exectution of the thread to proceed regardless of the time it takes for the operation to complete or the result it completes with, and no part of the thread falls into a wait state at any point.
+So, a *synchronous* operation *blocks* a process or thread until that operation is complete, leaving the thread in a "wait state". An *asynchronous* operation, on the other hand, is *non-blocking*. It permits execution of the thread to proceed regardless of the time it takes for the operation to complete or the result it completes with, and no part of the thread falls into a wait state at any point.
 
-Let's look at another example of a *synchronous* call that *blocks* a thread. Suppose we are building an application that compares the results of two Weather APIs to find their percent difference in temperature. In a blocking manner, we make a call to Weather API One, and wait for the result. Once we get a result, we call Weather API Two, and wait for its result. 
+Let's look at another example of a *synchronous* call that *blocks* a thread. Suppose we are building an application that compares the results of two Weather APIs to find their percent difference in temperature. In a blocking manner, we make a call to Weather API One and wait for the result. Once we get a result, we call Weather API Two and wait for its result. 
 
 <img src="SyncBlock.png" alt="Sync Blocking Ops">
 
@@ -24,9 +24,9 @@ In the case of a non-blocking call, we'd have something like this:
 
 <img src="AsyncNonBlock.png" alt="Non-Blocking Ops">
 
-You can cleary see how much faster we concluded execution. Rather than wait on API One and then wait on API Two, we could wait for both of them to complete at the same time, and acheive our results almost 50% faster. Notice, once we called API One and started waiting for its response, we also called API Two, and began waiting for its response at the same time as One.
+You can clearly see how much faster we concluded execution. Rather than wait on API One and then wait on API Two, we could wait for both of them to complete at the same time, and achieve our results almost 50% faster. Notice, once we called API One and started waiting for its response, we also called API Two and began waiting for its response at the same time as One.
 
-At this point, before moving into more concrete and tangible examples, it is important to mention that, for ease, the term *"Synchronous"* is generally shortened to "Sync", and the term *"Aynchronous"* is generally shortened to "Async". You will see this notation used in method/function names.
+At this point, before moving into more concrete and tangible examples, it is important to mention that, for ease, the term *"Synchronous"* is generally shortened to "Sync", and the term *"Asynchronous"* is generally shortened to "Async". You will see this notation used in method/function names.
 
 ### Callback Functions
 
@@ -43,7 +43,7 @@ asyncAddFunction(2, 4, function(sum) {
 ```
 Alternatively, a callback function might take in an error object and a response object as arguments, and present them when the async function is complete. We'll see this later with Express. When we called `asyncAddFunction(...)`, you'll notice we supplied a callback function for the callback parameter from the method definition. This function is an *anonymous* function (it does not have a name) and is written using the *Expression Syntax*. The method definition, on the other hand, is a function statement. It's not anonymous because it actually has a name (that being "asyncAddFunction").
 
-Some may note confusion since in the method definition, we do supply a name, that being "callback". However, the anonymous function passed in as the third parameter to `asyncAddFunction(...)` does not know about the name, and so it remains anonymous. We also can't execute that function at a later point by name, we'd have to go through the async calling function again to fire it.
+Some may note confusion since, in the method definition, we do supply a name, that being "callback". However, the anonymous function passed in as the third parameter to `asyncAddFunction(...)` does not know about the name, and so it remains anonymous. We also can't execute that function at a later point by name, we'd have to go through the async calling function again to fire it.
 
 As an example of a synchronous call, we can use the Node.js `readFileSync(...)` method. Again, we'll be moving to ES6+ later.
 
@@ -71,13 +71,13 @@ function readFile(path, callback) {
  callback(undefined, data); //Or, callback(err, undefined);
 }
 ```
-Allow us to look at one last implementation of an async function call. This will help to solidify the idea of callback functions being fired at a later point in time, and it ill help us to understand the execution of a typical Node.js program.
+Allow us to look at one last implementation of an async function call. This will help to solidify the idea of callback functions being fired at a later point in time, and it will help us to understand the execution of a typical Node.js program.
 
 ```javascript
 setTimeout(function {
 }, 1000);
 ```
-The `setTimeout(...)` method takes a callback function for the first parameter which will be fired after the amount of milliseconds specified as the second argument have occured.
+The `setTimeout(...)` method takes a callback function for the first parameter which will be fired after the number of milliseconds specified as the second argument have occurred.
 
 Let's look at a more complex example:
 ```javascript
@@ -97,9 +97,9 @@ setTimeout(function {
 
 console.log('Terminated program');
 ```
-The output we recieve is:
+The output we receive is:
 ```
-It's important to note that just because you see a callback function does not necessarily indicate an asyncrhonous call in the code.
+It's important to note that just because you see a callback function does not necessarily indicate an asynchronous call in the code.
 Initiated program.
 Terminated program.
 0 ms (0 sec) have passed.
@@ -108,4 +108,6 @@ Terminated program.
 ```
 You can see that the first log statement runs as expected. Instantaneously, the last log statement prints to the screen, for that happens before 0 seconds have surpassed after the second `setTimeout(...)`. Immediately thereafter, the second, third, and first `setTimeout(...)` methods execute.
 
-If Node.js was not non-blocking, we'd see the first log statement, wait 3 seconds to see the next, instantaneously see the third (the 0 second `setTimeout(...)`, and then have to wait one more second to see the last two log statements. The non-blocking nature of Node makes all timers start counting down from the moment the program is executed, rather than the order in which they are typed.
+If Node.js was not non-blocking, we'd see the first log statement, wait 3 seconds to see the next, instantaneously see the third (the 0-second `setTimeout(...)`, and then have to wait one more second to see the last two log statements. The non-blocking nature of Node makes all timers start counting down from the moment the program is executed, rather than the order in which they are typed.
+
+It is important to note that just because you see a callback function does not necessarily mean there is an asynchronous call in the code. 
