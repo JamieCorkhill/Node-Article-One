@@ -32,12 +32,12 @@ At this point, before moving into more concrete and tangible examples, it is imp
 
 You might be wondering, "if we can handle a call asynchronously, how do we know when that call is finished and we have a response?" Generally, we pass in as an argument to our async method a callback function, and that method will "call back" that function at a later time with a response. I'm using ES5 functions here, but we'll update to ES6 standards later.
 
-```
+```javascript
 function asyncAddFunction(a, b, callback){
-  callback(a + b);
+  callback(a + b); //This callback is the one passed in in the function call below.
 }
 
-asyncAddFunction(2, 4, function(sum){
+asyncAddFunction(2, 4, function(sum) {
   //Here we have the sum, 2 + 4 = 6.
 });
 ```
@@ -47,12 +47,12 @@ Some may note confusion since in the method definition, we do supply a name, tha
 
 As an example of a synchronous call, we can use the Node.js `readFileSync(...)` method. Again, we'll be moving to ES6+ later.
 
-```
+```javascript
 var fs = require('fs');
 var data = fs.readFileSync('/example.txt'); // The thread will be blocked here until complete.
 ```
 If we were doing this asynchronously, we'd pass in a callback function which would fire when the the async operation was complete.
-```
+```javascript
 var fs = require('fs');
 var data = fs.readFile('/example.txt', function(err, data){ //Move on, this will fire when ready.
   if(err) return console.log('Error: ', err);
