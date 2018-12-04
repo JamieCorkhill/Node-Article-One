@@ -99,6 +99,7 @@ console.log('Terminated program');
 ```
 The output we recieve is:
 ```
+It's important to note that just because you see a callback function does not necessarily indicate an asyncrhonous call in the code.
 Initiated program.
 Terminated program.
 0 ms (0 sec) have passed.
