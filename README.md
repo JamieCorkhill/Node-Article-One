@@ -110,7 +110,8 @@ You can see that the first log statement runs as expected. Instantaneously, the 
 If Node.js was not non-blocking, we'd see the first log statement, wait 3 seconds to see the next, instantaneously see the third (the 0-second `setTimeout(...)`, and then have to wait one more second to see the last two log statements. The non-blocking nature of Node makes all timers start counting down from the moment the program is executed, rather than the order in which they are typed.
 
 It is important to note that just because you see a callback function does not necessarily mean there is an asynchronous call in the code. 
-
+### Promises over Callbacks
+...
 ### Node APIs, the Callstack, and the Event Loop
 ...
 ### JavaScript Events
