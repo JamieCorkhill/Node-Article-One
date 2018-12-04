@@ -34,7 +34,7 @@ You might be wondering, "if we can handle a call asynchronously, how do we know 
 
 ```javascript
 function asyncAddFunction(a, b, callback){
-  callback(a + b); //This callback is the one passed in in the function call below.
+  callback(a + b); //This callback is the one passed in to the function call below.
 }
 
 asyncAddFunction(2, 4, function(sum) {
@@ -61,3 +61,50 @@ var data = fs.readFile('/example.txt', function(err, data){ //Move on, this will
 // Keep executing below, don't wait on the data.
 ```
 If you have never seen `return` used in that manner before, we are just saying to stop function execution so we don't print the data object if the error object is defined. We could also have just wrapped the log statement in an `else` clause.
+
+Like our `asyncAddFunction(...)`, the code behind the `fs.readFile(...)` function would be something along the lines of:
+
+```javascript
+function readFile(path, callback) {
+ //Behind the scenes code to read a file stream.
+ //Data is defined here.
+ callback(undefined, data); //Or, callback(err, undefined);
+}
+```
+Allow us to look at one last implementation of an async function call. This will help to solidify the idea of callback functions being fired at a later point in time, and it ill help us to understand the execution of a typical Node.js program.
+
+```javascript
+setTimeout(function {
+}, 1000);
+```
+The `setTimeout(...)` method takes a callback function for the first parameter which will be fired after the amount of milliseconds specified as the second argument have occured.
+
+Let's look at a more complex example:
+```javascript
+console.log('Initiated program.');
+
+setTimeout(function {
+  console.log('3000 ms (3 sec) have passed.');
+}, 3000);
+
+setTimeout(function {
+  console.log('0 ms (0 sec) have passed.');
+}, 0);
+
+setTimeout(function {
+  console.log('1000 ms (1 sec) has passed.');
+}, 1000);
+
+console.log('Terminated program');
+```
+The output we recieve is:
+```
+Initiated program.
+Terminated program.
+0 ms (0 sec) have passed.
+1000 ms (1 sec) has passed.
+3000 ms (3 sec) have passed.
+```
+You can see that the first log statement runs as expected. Instantaneously, the last log statement prints to the screen, for that happens before 0 seconds have surpassed after the second `setTimeout(...)`. Immediately thereafter, the second, third, and first `setTimeout(...)` methods execute.
+
+If Node.js was not non-blocking, we'd see the first log statement, wait 3 seconds to see the next, instantaneously see the third (the 0 second `setTimeout(...)`, and then have to wait one more second to see the last two log statements. The non-blocking nature of Node makes all timers start counting down from the moment the program is executed, rather than the order in which they are typed.
