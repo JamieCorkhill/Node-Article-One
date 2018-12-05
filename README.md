@@ -133,7 +133,67 @@ makeAPICall('/example', function(err, res1) {
   });
 });
 ```
-*Note: The ES6+ method to inject the `res1.userName` property rather than string concatenation would be to use "Template Strings". That way, rather than encapsulate our string in quotes (', or "), we would use backticks (\`), located beneath the Escape key on your keyboard. Then, we would use the notation `${}` to embed any JS expression inside the brackets. In the end, our earilier path would look like `\`/newExample/${res.UserName}\``.*
+*Note: The ES6+ method to inject the `res1.userName` property rather than string concatenation would be to use "Template Strings". That way, rather than encapsulate our string in quotes (', or "), we would use backticks (\`), located beneath the Escape key on your keyboard. Then, we would use the notation `${}` to embed any JS expression inside the brackets. In the end, our earilier path would be: `/newExample/${res.UserName}`, wrapped in backticks.*
+
+It is clear to see that this method of nesting callbacks can quickly become quite inelegant, so called the "JavaScript Pyramid of Doom". Jumping in, if we were using promises rather than callbacks, we could refactor our code from the first example as such:
+
+```javascript
+makeAPICall(path).then(function(res) {
+  // ...
+}, function(err) {
+  console.log('Error:', err);
+});
+```
+The first argument to the `then()` function is our success callback, and the second argument is our failure callback. Alternatively, we could lose the second argument to `.then()`, and call `.catch()` instead. Arguments to `.then()` are optional, and calling `.catch()` would be equivalent to `.then(successCallback, null)`.
+
+Using `.catch()`, we have:
+
+```javascript
+makeAPICall(path).then(function(res) {
+  // ...
+}).catch(function(err) {
+  console.log('Error: ', err);
+});
+```
+We can also restructure this for readability:
+
+```javascript
+makeAPICall(path)
+  .then(function(res) {
+    // ...
+  })
+  .catch(function(err) {
+    console.log('Error: ', err);
+  });
+```
+Promises really shine to improve the structure, and subsequently, elegance, of our code with the concept of "Promise Chaining". This would allow us to return a new Promise inside a `.then()` clause, so we could attach a second `.then` thereafter which would fire the appropriate callback from the second promise.
+
+Refactoring our multi API URL call above with Promises, we get:
+
+```javascript
+makeAPICall(path).then(function(res) {
+  return makeAPICall(`/newExample/${res.UserName}`);
+}, function(err) {
+  console.log('Error:', err);
+}).then(function(res) {
+  console.log(res);
+}, function(err) {
+  console.log('Error:', err);
+});
+```
+Like above, we can restructure this for readability, and remove the failure callbacks for a generic `catch()` all clause.
+```javascript
+makeAPICall(path)
+  .then(function(res) {
+    return makeAPICall(`/newExample/${res.UserName}`);
+   })
+  .then(function(res) {
+    console.log(res);
+   })
+   .catch(function(err) {
+    console.log('Error: ', err);
+   });
+```
 ### Node APIs, the Callstack, and the Event Loop
 ...
 ### JavaScript Events
