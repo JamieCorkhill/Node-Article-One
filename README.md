@@ -125,7 +125,7 @@ makeAPICall('pathOne', function(err, res1) {
 If we wanted to make another API call using the response from the first, we would have to nest both callbacks. Suppose I need to inject the `userName` property from the `res1` object into the path of the second API call. We would have:
 
 ```javascript
-makeAPICall('/example, function(err, res1) {
+makeAPICall('/example', function(err, res1) {
   if(err) return console.log('Error: ', err);
   makeAPICall('/newExample/' + res.userName, function(err, res2) {
     if(err) return console.log('Error: ', err);
@@ -133,7 +133,7 @@ makeAPICall('/example, function(err, res1) {
   });
 });
 ```
-*Note: The ES6+ method to inject the `res1.userName` property rather than string concatenation would be to use "Template Strings". That way, rather than encapsulate our string in quotes (', or "), we would use backticks (````), located beneath the Escape key on your keyboard. Then, we would use the notation `${}` to embed any JS expression inside the brackets. In the end, our earilier path would look like ``/newExample/${res.UserName}``.
+*Note: The ES6+ method to inject the `res1.userName` property rather than string concatenation would be to use "Template Strings". That way, rather than encapsulate our string in quotes (', or "), we would use backticks (\`), located beneath the Escape key on your keyboard. Then, we would use the notation `${}` to embed any JS expression inside the brackets. In the end, our earilier path would look like `\`/newExample/${res.UserName}\``.*
 ### Node APIs, the Callstack, and the Event Loop
 ...
 ### JavaScript Events
