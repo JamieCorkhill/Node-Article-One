@@ -111,7 +111,29 @@ If Node.js was not non-blocking, we'd see the first log statement, wait 3 second
 
 It is important to note that just because you see a callback function does not necessarily mean there is an asynchronous call in the code. 
 ### Promises over Callbacks
-Callbacks can quickly become messy in JavaScript, especially multiple nested callbacks. 
+Callbacks can quickly become messy in JavaScript, especially multiple nested callbacks. We are familiar with passing a callback as an agrument to a function, but Promises allow us to tack, or attach, a callback to an object returned from a function. This would allows us to handle multiple async calls in a more elegant manner.
+
+As an example, suppose we are making an API call, and our function, not so uniqely named `makeAPICall(...)` takes a URL and a callback. Then we might have:
+
+```javascript
+makeAPICall('pathOne', function(err, res1) {
+  if(err) return console.log('Error: ', err);
+  // ... 
+});
+```
+
+If we wanted to make another API call using the response from the first, we would have to nest both callbacks. Suppose I need to inject the `userName` property from the `res1` object into the path of the second API call. We would have:
+
+```javascript
+makeAPICall('/example, function(err, res1) {
+  if(err) return console.log('Error: ', err);
+  makeAPICall('/newExample/' + res.userName, function(err, res2) {
+    if(err) return console.log('Error: ', err);
+    console.log(res1);
+  });
+});
+```
+*Note: The ES6+ method to inject the `res1.userName` property rather than string concatenation would be to use "Template Strings". That way, rather than encapsulate our string in quotes (', or "), we would use backticks (````), located beneath the Escape key on your keyboard. Then, we would use the notation `${}` to embed any JS expression inside the brackets. In the end, our earilier path would look like ``/newExample/${res.UserName}``.
 ### Node APIs, the Callstack, and the Event Loop
 ...
 ### JavaScript Events
