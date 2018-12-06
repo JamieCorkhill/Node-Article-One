@@ -77,7 +77,7 @@ Allow us to look at one last implementation of an async function call. This will
 setTimeout(function {
 }, 1000);
 ```
-The `setTimeout(...)` method takes a callback function for the first parameter which will be fired after the number of milliseconds specified as the second argument have occurred.
+The `setTimeout(...)` method takes a callback function for the first parameter which will be fired after the number of milliseconds specified as the second argument has occurred.
 
 Let's look at a more complex example:
 ```javascript
@@ -111,9 +111,9 @@ If Node.js was not non-blocking, we'd see the first log statement, wait 3 second
 
 It is important to note that just because you see a callback function does not necessarily mean there is an asynchronous call in the code. 
 ### Promises over Callbacks
-Callbacks can quickly become messy in JavaScript, especially multiple nested callbacks. We are familiar with passing a callback as an agrument to a function, but Promises allow us to tack, or attach, a callback to an object returned from a function. This would allows us to handle multiple async calls in a more elegant manner.
+Callbacks can quickly become messy in JavaScript, especially multiple nested callbacks. We are familiar with passing a callback as an argument to a function, but Promises allow us to tack, or attach, a callback to an object returned from a function. This would allow us to handle multiple async calls in a more elegant manner.
 
-As an example, suppose we are making an API call, and our function, not so uniqely named `makeAPICall(...)` takes a URL and a callback. Then we might have:
+As an example, suppose we are making an API call, and our function, not so uniquely named `makeAPICall(...)` takes a URL and a callback. Then we might have:
 
 ```javascript
 makeAPICall('pathOne', function(err, res1) {
@@ -133,9 +133,9 @@ makeAPICall('/example', function(err, res1) {
   });
 });
 ```
-*Note: The ES6+ method to inject the `res1.userName` property rather than string concatenation would be to use "Template Strings". That way, rather than encapsulate our string in quotes (', or "), we would use backticks (\`), located beneath the Escape key on your keyboard. Then, we would use the notation `${}` to embed any JS expression inside the brackets. In the end, our earilier path would be: `/newExample/${res.UserName}`, wrapped in backticks.*
+*Note: The ES6+ method to inject the `res1.userName` property rather than string concatenation would be to use "Template Strings". That way, rather than encapsulate our string in quotes (', or "), we would use backticks (\`), located beneath the Escape key on your keyboard. Then, we would use the notation `${}` to embed any JS expression inside the brackets. In the end, our earlier path would be: `/newExample/${res.UserName}`, wrapped in backticks.*
 
-It is clear to see that this method of nesting callbacks can quickly become quite inelegant, so called the "JavaScript Pyramid of Doom". Jumping in, if we were using promises rather than callbacks, we could refactor our code from the first example as such:
+It is clear to see that this method of nesting callbacks can quickly become quite inelegant, so-called the "JavaScript Pyramid of Doom". Jumping in, if we were using promises rather than callbacks, we could refactor our code from the first example as such:
 
 ```javascript
 makeAPICall(path).then(function(res) {
@@ -166,7 +166,7 @@ makeAPICall(path)
     console.log('Error: ', err);
   });
 ```
-Promises really shine to improve the structure, and subsequently, elegance, of our code with the concept of "Promise Chaining". This would allow us to return a new Promise inside a `.then()` clause, so we could attach a second `.then` thereafter which would fire the appropriate callback from the second promise.
+Promises really shine to improve the structure, and subsequently, elegance, of our code with the concept of "Promise Chaining". This would allow us to return a new Promise inside a `.then()` clause, so we could attach a second `.then()` thereafter, which would fire the appropriate callback from the second promise.
 
 Refactoring our multi API URL call above with Promises, we get:
 
@@ -194,13 +194,74 @@ makeAPICall(path)
     console.log('Error: ', err);
    });
 ```
+### ES6 Arrow Functions and Const vs. Let
+Throughout all of our examples, we have been employing ES5 functions and the old `var` keyword. While millions of lines of code still run today employing those ES5 methods, it is useful to updated to current ES6+ standards. We'll start with `const` and `let`.
+
+You might be used to declaring a variable with the `var` keyword:
+
+```javascript
+var pi = 3.14;
+```
+With ES6+ standards, we could make that either
+```javascript
+let pi = 3.14;
+```
+or
+```javascript
+const pi = 3.14
+```
+where `const` means "constant" - a value that cannot be reasigned to later. (Except for object properties - we'll cover that soon.)
+
+In old JavaScript, block scopes, such as those in `if`, `while`, `{}`. `for`, etc. did not affect `var` in anyway, and this is quite different to more statically typed languages like Java or C++. That is, the scope of `var` is the entire enclosing function - and that could be global (if placed outside a function), or local (if placed within a function). To demonstrate this, see the following example:
+
+```javascript
+function myFunction() {
+  var num = 5;
+  console.log(num); // 5
+  for(var i = 0; i < 10; i++)
+  {
+    var num = i;
+    console.log('--');
+    console.log(num); //num becomes 0 - 9
+  }
+  console.log('--');
+  console.log(num); // 9
+  console.log(i); // 10
+}
+```
+The important thing to notice here is that defining a new `var num` inside the `for` scope directly affected the `var num` outside and above the `for`. This is because `var`'s scope is always that of the enclosing function, and not a block.
+
+Again, by defualt, `var i` inside `for()` defaults to `myFunction`'s scope, and so we can access `i` outside the loop and get 10.
+
+In terms of assigning values to variables, `let` is equivalent to `var`, it's just that `let` has block scoping, and so the anomalies that ocuured with `var` above will not happen.
+
+```javascript
+function myFunction() {
+  let num = 5;
+  console.log(num); // 5
+  for(let i = 0; i < 10; i++)
+  {
+    let num = i;
+    console.log('--');
+    console.log(num); //num becomes 0 - 9
+  }
+  console.log('--');
+  console.log(num); // 5
+  console.log(i); // undefined, ReferenceError
+}
+```
+
+You might be used to creating a function like this:
+
+```javascript
+function printHelloWorld() {
+  console.log('Hello, World!');
+}
+```
+With arrow functions, that would become:
 ### Node APIs, the Callstack, and the Event Loop
 ...
 ### JavaScript Events
-...
-### ES6 Arrow Functions
-...
-### Var vs. Const and Let
 ...
 ### The Node Package Manager
 ...
