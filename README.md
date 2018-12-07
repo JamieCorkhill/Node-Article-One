@@ -113,11 +113,22 @@ It is important to note that just because you see a callback function does not n
 ### Promises over Callbacks
 Callbacks can quickly become messy in JavaScript, especially multiple nested callbacks. We are familiar with passing a callback as an argument to a function, but Promises allow us to tack, or attach, a callback to an object returned from a function. This would allow us to handle multiple async calls in a more elegant manner.
 
-As an example, suppose we are making an API call, and our function, not so uniquely named `makeAPICall(...)` takes a URL and a callback. Then we might have:
+As an example, suppose we are making an API call, and our function, not so uniquely named `makeAPICall(...)`, takes a URL and a callback.
+
+Our function, `makeAPICall(...)` would be defined as 
 
 ```javascript
-makeAPICall('pathOne', function(err, res1) {
-  if(err) return console.log('Error: ', err);
+function makeAPICall(path, callback) {
+  // Attempt to make API call to path argument.
+  // ...
+  callback(undefined, res); // Or, callback(err, undefined);
+}
+```
+and we would call it with:
+
+```javascript
+makeAPICall('pathOne', function(err1, res1) {
+  if(err1) return console.log('Error: ', err1);
   // ... 
 });
 ```
@@ -125,11 +136,11 @@ makeAPICall('pathOne', function(err, res1) {
 If we wanted to make another API call using the response from the first, we would have to nest both callbacks. Suppose I need to inject the `userName` property from the `res1` object into the path of the second API call. We would have:
 
 ```javascript
-makeAPICall('/example', function(err, res1) {
-  if(err) return console.log('Error: ', err);
-  makeAPICall('/newExample/' + res.userName, function(err, res2) {
-    if(err) return console.log('Error: ', err);
-    console.log(res1);
+makeAPICall('/example', function(err1, res1) {
+  if(err1) return console.log('Error: ', err1);
+  makeAPICall('/newExample/' + res.userName, function(err2, res2) {
+    if(err2) return console.log('Error: ', err2);
+    console.log(res2);
   });
 });
 ```
@@ -138,7 +149,7 @@ makeAPICall('/example', function(err, res1) {
 It is clear to see that this method of nesting callbacks can quickly become quite inelegant, so-called the "JavaScript Pyramid of Doom". Jumping in, if we were using promises rather than callbacks, we could refactor our code from the first example as such:
 
 ```javascript
-makeAPICall(path).then(function(res) {
+makeAPICall('/example').then(function(res) {
   // ...
 }, function(err) {
   console.log('Error:', err);
@@ -171,26 +182,26 @@ Promises really shine to improve the structure, and subsequently, elegance, of o
 Refactoring our multi API URL call above with Promises, we get:
 
 ```javascript
-makeAPICall('/example').then(function(res) {
+makeAPICall('/example').then(function(res) { // First response callback. Fires on success to '/example' call.
   return makeAPICall(`/newExample/${res.UserName}`);
-}, function(err) {
+}, function(err) { // First failure callback. Fires if there is a failure calling with '/example'.
   console.log('Error:', err);
-}).then(function(res) {
+}).then(function(res) { // Second response callback. Fires on success to returned '/newExample/...' call.
   console.log(res);
-}, function(err) {
+}, function(err) { // Second failure callback. Fire if there is a failure calling with '/newExample/...'
   console.log('Error:', err);
 });
 ```
-Like above, we can restructure this for readability, and remove the failure callbacks for a generic `catch()` all clause.
+Like above, we can restructure this for readability, and remove the failure callbacks for a generic `catch()` all clause, that we can follow the DRY Principle (Don't Repeat Yourself), and only have to implement error handling once.
 ```javascript
 makeAPICall('/example')
-  .then(function(res) {
-    return makeAPICall(`/newExample/${res.UserName}`);
+  .then(function(res) { // Like earlier, fires with success and response from '/example'.
+    return makeAPICall(`/newExample/${res.UserName}`); // Returning here let's us chain on a new .then().
    })
-  .then(function(res) {
+  .then(function(res) { // Like earlier, fires with success and response from '/newExample'.
     console.log(res);
    })
-   .catch(function(err) {
+  .catch(function(err) { // Generic catch all method. Fires if there is an err with either earlier call.
     console.log('Error: ', err);
    });
 ```
