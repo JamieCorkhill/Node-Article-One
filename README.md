@@ -221,7 +221,7 @@ or
 ```javascript
 const pi = 3.14;
 ```
-where `const` means "constant" - a value that cannot be reasigned to later. (Except for object properties - we'll cover that soon.)
+where `const` means "constant" - a value that cannot be reasigned to later. (Except for object properties - we'll cover that soon. Also, variables declarded `const` are *not* immutable, only the reference to the variable is.)
 
 In old JavaScript, block scopes, such as those in `if`, `while`, `{}`. `for`, etc. did not affect `var` in anyway, and this is quite different to more statically typed languages like Java or C++. That is, the scope of `var` is the entire enclosing function - and that could be global (if placed outside a function), or local (if placed within a function). To demonstrate this, see the following example:
 
