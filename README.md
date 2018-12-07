@@ -206,7 +206,7 @@ makeAPICall('/example')
    });
 ```
 ### ES6 Arrow Functions and Const vs. Let
-Throughout all of our examples, we have been employing ES5 functions and the old `var` keyword. While millions of lines of code still run today employing those ES5 methods, it is useful to updated to current ES6+ standards. We'll start with `const` and `let`.
+Throughout all of our examples, we have been employing ES5 functions and the old `var` keyword. While millions of lines of code still run today employing those ES5 methods, it is useful to update to current ES6+ standards, and we'll refactor some of our code above. Let's start with `const` and `let`.
 
 You might be used to declaring a variable with the `var` keyword:
 
@@ -219,7 +219,7 @@ let pi = 3.14;
 ```
 or
 ```javascript
-const pi = 3.14
+const pi = 3.14;
 ```
 where `const` means "constant" - a value that cannot be reasigned to later. (Except for object properties - we'll cover that soon.)
 
