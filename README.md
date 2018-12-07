@@ -149,7 +149,7 @@ The first argument to the `then()` function is our success callback, and the sec
 Using `.catch()`, we have:
 
 ```javascript
-makeAPICall(path).then(function(res) {
+makeAPICall('/example').then(function(res) {
   // ...
 }).catch(function(err) {
   console.log('Error: ', err);
@@ -158,7 +158,7 @@ makeAPICall(path).then(function(res) {
 We can also restructure this for readability:
 
 ```javascript
-makeAPICall(path)
+makeAPICall('/example')
   .then(function(res) {
     // ...
   })
@@ -171,7 +171,7 @@ Promises really shine to improve the structure, and subsequently, elegance, of o
 Refactoring our multi API URL call above with Promises, we get:
 
 ```javascript
-makeAPICall(path).then(function(res) {
+makeAPICall('/example').then(function(res) {
   return makeAPICall(`/newExample/${res.UserName}`);
 }, function(err) {
   console.log('Error:', err);
@@ -183,7 +183,7 @@ makeAPICall(path).then(function(res) {
 ```
 Like above, we can restructure this for readability, and remove the failure callbacks for a generic `catch()` all clause.
 ```javascript
-makeAPICall(path)
+makeAPICall('/example')
   .then(function(res) {
     return makeAPICall(`/newExample/${res.UserName}`);
    })
