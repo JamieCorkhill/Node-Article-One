@@ -205,7 +205,7 @@ makeAPICall('/example')
     console.log('Error: ', err);
    });
 ```
-### ES6 Arrow Functions and Const vs. Let
+### ES6 Const vs. Let
 Throughout all of our examples, we have been employing ES5 functions and the old `var` keyword. While millions of lines of code still run today employing those ES5 methods, it is useful to update to current ES6+ standards, and we'll refactor some of our code above. Let's start with `const` and `let`.
 
 You might be used to declaring a variable with the `var` keyword:
@@ -261,7 +261,28 @@ function myFunction() {
   console.log(i); // undefined, ReferenceError
 }
 ```
+Looking at the `const` keyword, you can see that we attain an error if we try to reasign to it:
+```javascript
+const c = 299792458;
+c = 10; //TypeError: Assignment to constant variable. 
+```
+Things become interesting when we assign a `const` variable to an object:
+```javascript
+const myObject = {
+  name: 'Jane Doe'
+};
 
+// This is illegal: TypeError: Assignment to constant variable.
+myObject = { 
+  name: 'John Doe'
+};
+
+// This is legal. console.log(myObject.name) -> John Doe
+myObject.name = 'John Doe';
+```
+As you can see, only the reference in memory to the object assigned to a `const` object is immutable, not the value its self.
+
+### ES6 Arrow Functions
 You might be used to creating a function like this:
 
 ```javascript
@@ -270,6 +291,12 @@ function printHelloWorld() {
 }
 ```
 With arrow functions, that would become:
+
+```javascript
+const printHelloWorld = () => {
+
+};
+```
 ### Node APIs, the Callstack, and the Event Loop
 ...
 ### JavaScript Events
