@@ -221,9 +221,9 @@ or
 ```javascript
 const pi = 3.14;
 ```
-where `const` means "constant" - a value that cannot be reasigned to later. (Except for object properties - we'll cover that soon. Also, variables declarded `const` are *not* immutable, only the reference to the variable is.)
+where `const` means "constant" - a value that cannot be reassigned to later. (Except for object properties - we'll cover that soon. Also, variables declared `const` are *not* immutable, only the reference to the variable is.)
 
-In old JavaScript, block scopes, such as those in `if`, `while`, `{}`. `for`, etc. did not affect `var` in anyway, and this is quite different to more statically typed languages like Java or C++. That is, the scope of `var` is the entire enclosing function - and that could be global (if placed outside a function), or local (if placed within a function). To demonstrate this, see the following example:
+In old JavaScript, block scopes, such as those in `if`, `while`, `{}`. `for`, etc. did not affect `var` in any way, and this is quite different to more statically typed languages like Java or C++. That is, the scope of `var` is the entire enclosing function - and that could be global (if placed outside a function), or local (if placed within a function). To demonstrate this, see the following example:
 
 ```javascript
 function myFunction() {
@@ -242,9 +242,9 @@ function myFunction() {
 ```
 The important thing to notice here is that defining a new `var num` inside the `for` scope directly affected the `var num` outside and above the `for`. This is because `var`'s scope is always that of the enclosing function, and not a block.
 
-Again, by defualt, `var i` inside `for()` defaults to `myFunction`'s scope, and so we can access `i` outside the loop and get 10.
+Again, by default, `var i` inside `for()` defaults to `myFunction`'s scope, and so we can access `i` outside the loop and get 10.
 
-In terms of assigning values to variables, `let` is equivalent to `var`, it's just that `let` has block scoping, and so the anomalies that ocuured with `var` above will not happen.
+In terms of assigning values to variables, `let` is equivalent to `var`, it's just that `let` has block scoping, and so the anomalies that occurred with `var` above will not happen.
 
 ```javascript
 function myFunction() {
