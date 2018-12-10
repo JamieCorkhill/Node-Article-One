@@ -294,9 +294,80 @@ With arrow functions, that would become:
 
 ```javascript
 const printHelloWorld = () => {
-
+  console.log('Hello, World!');
 };
 ```
+Suppose we have a simple function that returns the square of a number:
+
+```javascript
+const squareNumber = (x) => {
+  return x * x;
+}
+
+squareNumber(5); // We can call an arrow function like an ES5 functions. Returns 25.
+```
+You can see that, just like with ES5 functions, we can take in arguments with parentheses, we can use normal return statements, and we can call the function just like any other.
+
+It's important to note that, while parentheses are required if our function takes no arguments (like with `printHelloWorld()` above), we can drop the parentheses if it only takes one, so our earlier `squareNumber()` method definition can be rewritten as:
+
+```javascript
+const squareNumber = x => { // Notice we have droped the parentheses for we only take in one argument.
+  return x * x;
+}
+```
+Whether you choose encapsualte a single argument in parentheses or not is a matter of personal taste, and you will likely see developers use both methods.
+
+Finally, if we only want to return one expression, as with `squareNumber(...)` above, we can put the return statement in line with the method signature:
+
+```javascript
+const squareNumber = x => x * x;
+```
+That is, 
+
+```javascript
+const test = (a, b, c) => expression 
+```
+is the same as
+
+```javascript
+const test = (a, b, c) => { return expression }
+```
+To help solidfy the concept of ES6 functions, we'll refactor some of our earlier code allowing us to compare the differences between both notations.
+
+`asyncAddFunction(...)`, from above, could be refactored from:
+ 
+```javascript
+function asyncAddFunction(a, b, callback){
+  callback(a + b); 
+}
+```
+to:
+```javascript
+const aysncAddFunction = (a, b, callback) => {
+  callback(a + b);
+};
+```
+or even to:
+```javascript
+const aysncAddFunction = (a, b, callback) => callback(a + b); // This will return callback(a + b).
+```
+When calling the function, we could pass an arrow function in for the callback:
+
+```javascript
+asyncAddFunction(10, 12, sum => { // No parentheses cause we only take one argument.
+  console.log(sum);
+}
+```
+
+It is clear to see how this method improves code readability. To show you just one case, we can take our old ES5 Promise based example above, and refactor it to use arrow functions.
+
+```javascript
+makeAPICall('/example')
+  .then(res => makeAPICall(`/newExample/${res.UserName}`))
+  .then(res => console.log(res))
+  .catch(err => console.log('Error: ', err));
+```
+
 ### Node APIs, the Callstack, and the Event Loop
 ...
 ### JavaScript Events
