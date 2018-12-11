@@ -311,13 +311,13 @@ You can see that, just like with ES5 functions, we can take in arguments with pa
 It's important to note that, while parentheses are required if our function takes no arguments (like with `printHelloWorld()` above), we can drop the parentheses if it only takes one, so our earlier `squareNumber()` method definition can be rewritten as:
 
 ```javascript
-const squareNumber = x => { // Notice we have droped the parentheses for we only take in one argument.
+const squareNumber = x => { // Notice we have dropped the parentheses for we only take in one argument.
   return x * x;
 }
 ```
-Whether you choose encapsualte a single argument in parentheses or not is a matter of personal taste, and you will likely see developers use both methods.
+Whether you choose to encapsulate a single argument in parentheses or not is a matter of personal taste, and you will likely see developers use both methods.
 
-Finally, if we only want to return one expression, as with `squareNumber(...)` above, we can put the return statement in line with the method signature:
+Finally, if we only want to implicitly return one expression, as with `squareNumber(...)` above, we can put the return statement in line with the method signature:
 
 ```javascript
 const squareNumber = x => x * x;
@@ -332,7 +332,13 @@ is the same as
 ```javascript
 const test = (a, b, c) => { return expression }
 ```
-To help solidfy the concept of ES6 functions, we'll refactor some of our earlier code allowing us to compare the differences between both notations.
+Note, when using the above shorthand to implicitly return an object, things become obscure. What stops JavaScript from believing the brackets within which we are required to encapsulate our object is not our function body? To get around this, we wrap the object's brackets in parentheses. This explicitly lets JavaScript know that we are indeed returning an object, and we are not just defining a body.
+
+```javascript
+const test = () => ({pi: 3.14});
+```
+
+To help solidify the concept of ES6 functions, we'll refactor some of our earlier code allowing us to compare the differences between both notations.
 
 `asyncAddFunction(...)`, from above, could be refactored from:
  
