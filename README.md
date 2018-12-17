@@ -373,7 +373,44 @@ makeAPICall('/example')
   .then(res => console.log(res))
   .catch(err => console.log('Error: ', err));
 ```
+Now, there are some caveats with arrow functions. For one, they do not bind a `this` keyword. Suppose I have the following object:
 
+```javascript
+const Person = {
+  name: 'John Doe',
+  greeting: () => {
+    console.log(`Hi. My name is ${this.name}.`);
+  }
+}
+```
+You might expect a call to `Person.greeting()` will return 'Hi. My name is John Doe.' Instead, we get: 'Hi. My name is undefined.'. That is because arrow functions do not have a `this`, and so attempting to use `this` inside an arrow function defaults to the `this` of the enclosing scope, and the encolosing scope of the `Person` object is `window`, in the browser, or `module.exports` in Node.
+
+To prove this, if we use the same object again, but set the `name` property of the global `this` to something like 'Jane Doe', then `this.name` in the arrow function returns 'Jane Doe', because the global `this` is within the enclosing scope, or is the parent of the `Person` object.
+
+```javascript
+this.name = 'Jane Doe';
+
+const Person = {
+  name: 'John Doe',
+  greeting: () => {
+    console.log(`Hi. My name is ${this.name}.`);
+  }
+}
+
+Person.greeting(); // Hi. My name is Jane Doe
+```
+This is known as 'Lexical Scoping', and we can get around it by using the so called 'Short Syntax', which is where we lose the colon and the arrow as to refactor our object as such:
+
+```javascript
+const Person = {
+  name: 'John Doe',
+  greeting() {
+    console.log(`Hi. My name is ${this.name}.`);
+  }
+}
+
+Person.greeting() //Hi. My name is John Doe.
+```
 ### Node APIs, the Callstack, and the Event Loop
 ...
 ### JavaScript Events
