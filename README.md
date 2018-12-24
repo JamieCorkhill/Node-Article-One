@@ -383,7 +383,7 @@ const Person = {
   }
 }
 ```
-You might expect a call to `Person.greeting()` will return 'Hi. My name is John Doe.' Instead, we get: 'Hi. My name is undefined.'. That is because arrow functions do not have a `this`, and so attempting to use `this` inside an arrow function defaults to the `this` of the enclosing scope, and the encolosing scope of the `Person` object is `window`, in the browser, or `module.exports` in Node.
+You might expect a call to `Person.greeting()` will return 'Hi. My name is John Doe.' Instead, we get: 'Hi. My name is undefined.'. That is because arrow functions do not have a `this`, and so attempting to use `this` inside an arrow function defaults to the `this` of the enclosing scope, and the enclosing scope of the `Person` object is `window`, in the browser, or `module.exports` in Node.
 
 To prove this, if we use the same object again, but set the `name` property of the global `this` to something like 'Jane Doe', then `this.name` in the arrow function returns 'Jane Doe', because the global `this` is within the enclosing scope, or is the parent of the `Person` object.
 
@@ -399,7 +399,7 @@ const Person = {
 
 Person.greeting(); // Hi. My name is Jane Doe
 ```
-This is known as 'Lexical Scoping', and we can get around it by using the so called 'Short Syntax', which is where we lose the colon and the arrow as to refactor our object as such:
+This is known as 'Lexical Scoping', and we can get around it by using the so-called 'Short Syntax', which is where we lose the colon and the arrow as to refactor our object as such:
 
 ```javascript
 const Person = {
@@ -413,6 +413,43 @@ Person.greeting() //Hi. My name is John Doe.
 ```
 ### (Optional) Javascript Classes & `this` Binding
 ...
+### APIs & JSON
+APIs are a very common paradigm in programming, and even if you are just starting out in your career as a developer, APIs and their usage, especially in web and mobile development, will likely come up more often than not.
+
+An API is an *Application Programming Interface*, and it is basically a method by which two decoupled systems may communicate with each other. In more technical terms, an API permits a system or computer program (usually a server) to receive requests and send appropriate responses (to a client, also known as a host).
+
+Suppose you are building a weather application. You need a way to geocode a user's address into a latitude and longitude, and then a way to attain the current or forecasted weather at that particular location.
+
+As a developer, you want to focus on building your app and monetizing it, not putting the infrastructure in place to geocode addresses or placing weather stations in every city.
+
+Luckily for you, companies like Google and OpenWeatherMap have already put that infrastructure in place, you just need a way to talk to it - that is where the API comes in. While, as of now, we have developed a very abstract and ambiguous definition of the API, bear with me. We'll be getting to tangible examples soon.
+
+Now, it costs money for companies to develop, maintain, and secure that aforementioned infrastructure, and so it is common for corporations to sell you access to their API. This is done with that is known as an API key, a unique alphanumeric identifier associating you, the developer, with the API. Every time you ask the API to send you data, you pass along your API key. The server can then authenticate you and keep track of how many API calls you are making, and you will be charged appropriately. The API key also permits *Rate-Limiting* or *API Call Throttling* (a method of throttling the number of API calls in a certain timeframe as to not overwhelm the server, preventing DOS attacks - Denial of Service). Most companies, however, will provide a free quota, giving you, as an example, 25000 free API calls a day before charging you.
+
+Up to this point, we have established that an API is a method by which two computer programs can communicate with each other. If a server is storing data, such as a website, and your browser makes a request to download the code for that site, that was the API in action.
+
+Let us look at a more tangible example, and then we'll look at a more real-world, technical one. Suppose you are eating out at a restaurant for dinner. You are equivalent to the client, sitting at the table. The chefs in the kitchen, however, are the server.
+
+Since you will never directly talk to the chef, there is no way for him/her to receive your request (for what order you would like to make) or for him/her to provide you with your meal once you order it. We need someone in the middle. In this case, it's the waiter, analogous to the API. The API provides a medium with which you (the client) may talk to the server (the chef), as well as a set of rules for how that communication should be made (the menu - one meal is allowed two sides, etc.)
+
+Now, how do you actually talk to the API (the waiter)? You might speak English, but the chef might speak Spanish. Is the waiter expected to know both languages to translate? What if a third person comes in who only speaks Indian? What then? Well, all clients and servers have to agree to speak a common language, and in computer programming, that language is JSON, pronounced JAY-sun, and it stands for JavaScript Object Notation.
+
+At this point, we don't quite know what JSON looks like. It's not a computer programming language, it's just, well, a language, like English or Spanish, that everyone (everyone being computers) understands on a guaranteed basis. It's guaranteed because it's a standard, notably *RFC 8259*, the *JavaScript Object Notation (JSON) Data Interchange Format* by the Internet Engineering Task Force (IETF).
+
+Even without formal knowledge of what JSON actually is and what it looks like (we'll see in an upcoming article in this series), we can go ahead introduce a technical example operating on the Internet today that employs APIs and JSON. APIs and JSON are not just something you can choose to use, it's not equivalent to one out of a thousand JavaScript frameworks you can pick to do the same thing. It is *THE* standard for data exchange on the web.
+
+Suppose you are building a travel website that compares prices for aircraft, rental car, and hotel ticket prices. Let us walk through, step-by-step, on a high level, how we would build such an application. Of course, we need our User Interface, the front-end, but that is out of scope for this article.
+
+We want to provide our users with the lowest price booking method. Well, that means we need to somehow attain all possible booking prices, and then compare all of the elements in that set (perhaps we store them in an array) to find the smallest element (known as the infimum in mathematics.)
+
+How will we get this data? Well, suppose all of the booking sites have a database full of prices. Those sites will provide an API, which exposes the data in those databases for use by you. You will call each API for each site to attain all possible booking prices, store them in your own array, find the lowest or minimum element of that array, and then provide the price and booking link to your user. We'll ask the API to query its database for the price in JSON, and it will respond with said price in JSON to us. We can then use, or parse, that accordingly. We have to parse it because APIs will return JSON as a string, not that actual data type of JSON. This might not make sense now, and that's okay. We'll be covering it more in a future article.
+
+Also, note that just because something is called an API does not necessarily mean it operates on the web and sends and receives JSON. The Java API, for example, is just the list of classes, packages, and interfaces that are part of the Java Development Kit (JDK), providing programming functionality to the programmer.
+
+Okay. We know we can talk to a program running on a server by way of an Application Programming Interface, and we know that the language common language with which we do this is known as JSON. But in the web development and networking, everything has a protocol. What do we actually do to make an API call? That's where HTTP Requests enter the picture, the HyperText Transfer Protocol, defining how messages are formatted and transmitted across the Internet.
+
+### HTTP Requests
+...
 ### Node APIs, the Callstack, and the Event Loop
 ...
 ### JavaScript Events
@@ -420,8 +457,6 @@ Person.greeting() //Hi. My name is John Doe.
 ### The Node Package Manager
 ...
 ### MongoDB 
-...
-### HTTP Requests
 ...
 ### Building a Command Line Node Application
 ...
