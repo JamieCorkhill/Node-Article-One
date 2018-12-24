@@ -177,6 +177,8 @@ makeAPICall('/example')
     console.log('Error: ', err);
   });
 ```
+It is important to note that we can't just tack a `.then()` call on to any function and expect it to work. The function we are calling has to actually return a promise, a promise that will fire the `.then()` when that async operation is complete. In this case, `makeAPICall(...)` will do it's thing, firing either the `then()`block or the `catch()` block when completed.
+
 Promises really shine to improve the structure, and subsequently, elegance, of our code with the concept of "Promise Chaining". This would allow us to return a new Promise inside a `.then()` clause, so we could attach a second `.then()` thereafter, which would fire the appropriate callback from the second promise.
 
 Refactoring our multi API URL call above with Promises, we get:
