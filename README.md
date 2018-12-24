@@ -179,6 +179,35 @@ makeAPICall('/example')
 ```
 It is important to note that we can't just tack a `.then()` call on to any function and expect it to work. The function we are calling has to actually return a promise, a promise that will fire the `.then()` when that async operation is complete. In this case, `makeAPICall(...)` will do it's thing, firing either the `then()`block or the `catch()` block when completed.
 
+To make `makeAPICall(...)` return a Promise, we assign a function to a variable, where that function is the Promise contstructor. Promises can be either *fullfilled* or *rejected*, where fullfilled means that action relating to the promise completed successfully, and rejected meaning the opposite. Once the promise is either fullfilled or rejected, we say it has *settled*, and while waiting for it to settle, perhaps during an async call, we say that the promise is *pending*. 
+
+The Promise constructor takes in one callback function as an argument, which we recieves two paramters - `resolve` and `reject`, which we will call at a later point in time to fire eiher the success callback in `.then()`, or the `.then()` failure callback, or `.catch()`, if provided.
+
+Here is an example of what this looks like:
+
+```javascript
+var examplePromise = new Promise(function(resolve, reject) {
+  // Do whatever we are going to do and then make the appropiate call below:
+  resolve('Happy!'); // - Everything worked.
+  reject('Sad!'); // - We noticed that something went wrong.
+}):
+```
+Then, we can use:
+```javascript
+examplePromise.then(/* Both callback functions in here */);
+```
+
+Notice, however, that `examplePromise` can't take any arguments. That kind of defeats the purpose, so we can return a promise instead.
+
+```javascript
+function makeAPICall(path) {
+  return new Promise(function(resolve, reject) {
+    // Make our async API call here.
+    if (/* All is good */) return resolve(res); //res is the response, would be defined above.
+    else return reject(err); //err is error, would be defined above.
+  });
+}
+```
 Promises really shine to improve the structure, and subsequently, elegance, of our code with the concept of "Promise Chaining". This would allow us to return a new Promise inside a `.then()` clause, so we could attach a second `.then()` thereafter, which would fire the appropriate callback from the second promise.
 
 Refactoring our multi API URL call above with Promises, we get:
@@ -194,6 +223,8 @@ makeAPICall('/example').then(function(res) { // First response callback. Fires o
   console.log('Error:', err);
 });
 ```
+Noteice that we first call `makeAPICall('/example')`. That returns a promise, and so we attach a `.then()`. Inside that `then()`, we return a new call to `makeAPICall(...)`, which, in and of itself, as seen earlier, returns a promise, permitting us chain on a new `.then()` after the first.
+
 Like above, we can restructure this for readability, and remove the failure callbacks for a generic `catch()` all clause. Then, we can follow the DRY Principle (Don't Repeat Yourself), and only have to implement error handling once.
 ```javascript
 makeAPICall('/example')
