@@ -41,7 +41,7 @@ asyncAddFunction(2, 4, function(sum) {
   //Here we have the sum, 2 + 4 = 6.
 });
 ```
-Such a function is called a "Higher-Order Function", since it takes a function (our callback) as an argument. Alternatively, a callback function might take in an error object and a response object as arguments, and present them when the async function is complete. We'll see this later with Express. When we called `asyncAddFunction(...)`, you'll notice we supplied a callback function for the callback parameter from the method definition. This function is an *anonymous* function (it does not have a name) and is written using the *Expression Syntax*. The method definition, on the other hand, is a function statement. It's not anonymous because it actually has a name (that being "asyncAddFunction").
+Such a function is called a "Higher-Order Function" since it takes a function (our callback) as an argument. Alternatively, a callback function might take in an error object and a response object as arguments, and present them when the async function is complete. We'll see this later with Express. When we called `asyncAddFunction(...)`, you'll notice we supplied a callback function for the callback parameter from the method definition. This function is an *anonymous* function (it does not have a name) and is written using the *Expression Syntax*. The method definition, on the other hand, is a function statement. It's not anonymous because it actually has a name (that being "asyncAddFunction").
 
 Some may note confusion since, in the method definition, we do supply a name, that being "callback". However, the anonymous function passed in as the third parameter to `asyncAddFunction(...)` does not know about the name, and so it remains anonymous. We also can't execute that function at a later point by name, we'd have to go through the async calling function again to fire it.
 
@@ -481,8 +481,47 @@ Also, note that just because something is called an API does not necessarily mea
 
 Okay. We know we can talk to a program running on a server by way of an Application Programming Interface, and we know that the common language with which we do this is known as JSON. But in the web development and networking world, everything has a protocol. What do we actually do to make an API call, and what does that look like code-wise? That's where HTTP Requests enter the picture, the HyperText Transfer Protocol, defining how messages are formatted and transmitted across the Internet. Once we have an understanding of HTTP (and HTTP verbs, you'll see that in the next section), we can look into actual JavaScript frameworks and methods (like `fetch()`) offered by the *JavaScript API* (similar to the Java API), that actually allow us to make API calls. 
 
-### HTTP Requests
-...
+### HTTP and HTTP Requests
+HTTP is the HyperText Transfer Protocol. It is the underlying protcol that determines how messages are formatted as they are transmitted adn recieved across the web. Let's think about what happens when, for example, you attempt to load the home page of Smashing Magazine in your web browser.
+
+You type the website URL (Uniform Resource Locator) in the URL bar, where the DNS server (Domain Name Server, out of scope for this article) resolves the URL into the appropriate IP Address. The browser makes a request, called a GET Request, to the Web Server to, well, GET the underlying HTML behind the site. The Web Server will respond with a message such as "OK", and then will go ahead and send the HTML down to the browser where it will be parsed and rendered accordingly.
+
+There are a few things to note here. First, the GET Request, and then the "OK" response. Suppose you have a specific database, and you want to write an API to expose that database to your users. Suppose the database contained books the user wants to read. Then there are four fundamental operations your user may want to perform on this database, that is, Create a record, Read a record, Update a record, or Delete a record, known collectively as CRUD operations.
+
+Let's look at the Read operation for a moment. Without incorrectly assimilating or conflating the notion of a web server and a database, that Read operation is very similar to your web browser attempting to *get* the site from the server, just as to read a record is to *get* the record from the database.
+
+This is known as an HTTP Request. You are making a request to some server somwhere to *get* some data, and, as such, the request is appropiately named "GET", capitalization being a standard way to denote such requests.
+
+What about the Create portion of CRUD? Well, when talking about HTTP Requests, that is kown as a POST request. Just as you might *post* a message on a social media platform, you might also *post* a new record to a database. Another such option is PUT, *putting* a new record in the database.
+
+CRUD's Update allows us to use either PUT or PATCH. You may be wondering, "You just said that PUT can be used to create a resource. Why then are you saying it can also be used to update a resource?" Well, HTTP's PUT will either create a new record or will update/replace the old one.
+
+Let's look at this a bit more in detail, and then we'll get to PATCH.
+
+An API generally works by making HTTP requests to specific routes, in a URL. Suppose we are making an API to store a user's booklist. Then we might be able to view those books at the URL `.../books`. A POST requests to `.../books` will create a new book with whatever properties you define (think id, title, ISBN, author, publishing data, etc.) at the `.../books` route. It doesn't matter what the underlying data structure is that stores all the books at `.../books` right now. We just care that the API exposes that endpoint (accessd through the route) to manipulate data. The prior sentence was key: A POST request CREATES a new book at the `...books/` route. The difference between PUT and POST, then, is that PUT will create a new book (as with POST) if no such book exists, *or, it will replace an existing book* if the book already exists within that aforementioned data structure.
+
+Suppose each book has the following properties: id, title, ISBN, author, hasRead (boolean).
+
+Then to add a new book, as seen earlier, we would make a POST request to `.../books`. If we wanted to completely update or replace a book, we would make a PUT request to `.../books/id` where `id` is the ID of the book we want to replace.
+
+While PUT completely replaces an existing book, PATCH updates something having to do with a specific book, perhaps modifying the `hasRead` boolean property.
+
+It can be difficult to see the meaning of this right now, for thus far, we've established everything in theory but haven't seen any tangible code that actually makes an HTTP request. We shall, however, get to that soon.
+
+There is one last fundamental CRUD operation and it's called Delete. As you would expect, the name of such an HTTP Request is "DELETE", and it works much the same as PATCH, requing the book's ID be provided in a route.
+
+We have learned thus far, then, that routes are specific URLs to which you make an HTTP Request, and that endpoints are functions the API provides, doing something to the data it exposes. That is, the endpoint is a programming language function located on the other end of the route, and it performs whatever HTTP Request you specified. We also learned that there exist such terms as POST, GET, PUT, PATCH, DELETE, and more (known as HTTP verbs) that actually specify what requests you are making to the API.
+
+So, we might make a GET request to the URL `.../books/id` where the ID passed in is known as a paramater. We could make a POST, PUT, or PATCH request to `.../books` to create a resource or to `.../books/id` to modify/replace/update a resource. And we can also make a DELETE request to `.../books/id` to delete a specific book.
+
+A full list of HTTP Request Methods can be found here: https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
+
+It is also important to note that after making an HTTP Request, we'll recieve a response. The specific response is determined by how we build the API, but you should always recieve a status code. Earlier, we said that when your web browser requests the HTML from the web server, it'll respond with "OK". That is known as an HTTP Status Code, more specifically, HTTP 200 OK. The status code just specifies how the operation or action specifed in the endpoint (remember, that's our function that does all the work) completed. HTTP Status Codes are sent back by the server, and there are probably many you are familair with, such as 404 Not Found (the resource of file could not be found, this would be like making a GET request to `.../books/id` where no such ID exists.) 
+
+A complete list of HTTP Status Codes can be found here: https://httpstatuses.com/
+
+
+
 ### Node APIs, the Callstack, and the Event Loop
 ...
 ### JavaScript Events
