@@ -504,13 +504,13 @@ Suppose each book has the following properties: id, title, ISBN, author, hasRead
 
 Then to add a new book, as seen earlier, we would make a POST request to `.../books`. If we wanted to completely update or replace a book, we would make a PUT request to `.../books/id` where `id` is the ID of the book we want to replace.
 
-While PUT completely replaces an existing book, PATCH updates something having to do with a specific book, perhaps modifying the `hasRead` boolean property.
+While PUT completely replaces an existing book, PATCH updates something having to do with a specific book, perhaps modifying the `hasRead` boolean property we defined above.
 
 It can be difficult to see the meaning of this right now, for thus far, we've established everything in theory but haven't seen any tangible code that actually makes an HTTP request. We shall, however, get to that soon.
 
 There is one last fundamental CRUD operation and it's called Delete. As you would expect, the name of such an HTTP Request is "DELETE", and it works much the same as PATCH, requiring the book's ID be provided in a route.
 
-We have learned thus far, then, that routes are specific URLs to which you make an HTTP Request, and that endpoints are functions the API provides, doing something to the data it exposes. That is, the endpoint is a programming language function located on the other end of the route, and it performs whatever HTTP Request you specified. We also learned that there exist such terms as POST, GET, PUT, PATCH, DELETE, and more (known as HTTP verbs) that actually specify what requests you are making to the API.
+We have learned thus far, then, that routes are specific URLs to which you make an HTTP Request, and that endpoints are functions the API provides, doing something to the data it exposes. That is, the endpoint is a programming language function located on the other end of the route, and it performs whatever HTTP Request you specified. We also learned that there exist such terms as POST, GET, PUT, PATCH, DELETE, and more (known as HTTP verbs) that actually specify what requests you are making to the API. Like JSON, these HTTP Request Methods are Internet standards as defined by the Internet Engineering Task Force (IETF), most notably, [RFC 7231, Section Four: Request Methods](https://tools.ietf.org/html/rfc7231#section-4), and [RFC 5789, Section Two: Patch Method](https://tools.ietf.org/html/rfc5789#section-2), where RFC is an acronym for Request for Comments.
 
 So, we might make a GET request to the URL `.../books/id` where the ID passed in is known as a parameter. We could make a POST, PUT, or PATCH request to `.../books` to create a resource or to `.../books/id` to modify/replace/update a resource. And we can also make a DELETE request to `.../books/id` to delete a specific book.
 
