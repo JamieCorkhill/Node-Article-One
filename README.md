@@ -520,14 +520,12 @@ It is also important to note that after making an HTTP Request, we'll receive a 
 
 A complete list of HTTP Status Codes can be found here: https://httpstatuses.com/
 
-
-
 ### Node APIs, the Callstack, and the Event Loop
 ...
 ### JavaScript Events
 ...
 ### The Node Package Manager
-...
+When programming with Node and JavaScript, it'll be quite common to here about `npm`. Npm is a package manager which does just that - permits the downloading of third-party packages that solve common problems in JavaScript. Other solutions, such as Yarn, Npx, Grunt, and Bower exist as well, and in this section, we'll talk about what they are, what their differences are, and how you can install dependencies for your application through a simmple Command Line Interface (CLI) using them. We'll also mention their respective configurations by setting up the dependencies of the Command Line Application we'll be building in the second to last section to actually see how to make API Requests in Node.
 ### MongoDB 
 ...
 ### Building a Command Line Node Application
