@@ -6,6 +6,10 @@ What exactly does it mean for Node to be “asynchronous”, and how does that d
 
 We’ll attempt to answer all of these questions and more throughout this article as we build a simple Bookshelf API utilizing a variety of third-party NPM modules – including Express, Mongoose, and Lodash.
 
+### What is Node.js
+...
+*Notes:* Node is only an enviroment, or runtime, within which to run normal JavaScript (with minor differences) outside of the browser.
+
 ### Blocking/Non-Blocking and Synchronous/Asynchronous
 
 Suppose we are making a database call to retrieve properties about a user. That call is going to take time, and if the request is "blocking", then that means it will block the execution of our program until the call is complete. In this case, we made a “synchronous” request since it ended up blocking the thread.
@@ -529,7 +533,14 @@ When programming with Node and JavaScript, it'll be quite common to here about `
 ### MongoDB 
 ...
 ### Building a Command Line Node Application
-...
+When building out an application, you will see many authors dump their entire code base at the beginning of the article, and then attempt to explain each line thereafter. In this text, I'll take a different approach. I won't worry about modularity or performance, I won't split the code base into seperate files, and I won't follow the DRY Principle or attempt to make the code reusable. When just learning, it is useful to make things as simple as possible, and so that is the approach I will take here.
+
+If you want to see the finished code, visit the GitHub Repository HERE.
+
+If you want to see the refactored version of the code making use of some of the properties in the former paragraph, vist THIS GitHub Respository.
+
+Let us be clear about what we are building. We won't be concerned with user input, and so we won't make use of packages like [Yargs](https://www.npmjs.com/package/yargs). We also won't be buillding our own API. That will come in a later article in this series when we make use of the Express Web Application Framework. I take this approach as to not conflate Node.js with the power of Express and APIs, since most tutorials do. Rather, I'll provide two methods (of many) by which to call and recieve data from an external API, the first of which utilizes a third-party JavaScript library, and another which uses a native JavaScript method. The API we'll be calling is a Weather API, which we'll call from Node and dump its output to the terminal, perhaps with some formatting, known as "pretty-printing". I'll cover the entire process, including how to set up the API and attain API Key, the steps of which provide the correct results as of January 2019.
+
 ### Conclusion
 ...
 
