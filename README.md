@@ -545,6 +545,40 @@ We'll be using the OpenWeatherMap API for this project, so to get started, navig
 
 Before we start building out the application, we'll vist the API Documentation (https://openweathermap.org/current) to learn how to format our API Key. In this project, we'll be specifiying a zip code and a country code to attain the weather information at that location.
 
+From the docs, we can see that the method by which we do this is to provide the following URL:
+
+`api.openweathermap.org/data/2.5/weather?zip={zip code},{country code}`
+
+Into which we could input data:
+
+`api.openweathermap.org/data/2.5/weather?zip=94040,us`
+
+Now, before we can actually attain relevant data from this API, we'll need to provide our new API Key as a query paramater:
+
+`api.openweathermap.org/data/2.5/weather?zip=94040,us&appid={YOUR_API_KEY}`
+
+For now, copy that URL into a new tab in your web browser, replacing the `{YOUR_API_KEY}` placeholder with the API Key you obtained earlier when you registered for an account.
+
+The text you can see is actually JSON - the agreed upon langauge of the web as dicussed earlier.
+
+To inspect this further, hit `Ctrl + Shift + I` in Google Chrome to open the Chrome Developer tools, and then navigate to the Network tab. At present, there should be no data here.
+
+<img src="net-activity.png" alt="Empty Chrome Dev Tools Network Tab">
+
+To actually montior network data, reload the page, and watch the tab be populated with useful information. Click the first link as depicted in the image below.
+
+<img src="pop-net-activity.png" alt="Populated Chrome Dev Tools Network Tab">
+
+Once you click on that link, we can actually view HTTP specific information, such as the headers. Headers are sent in the response from the API (you can also, in some cases, send your own headers to the API, or you can even created your own custom headers (often prefixed with `x-`) to send back when building your own API), and just contain extra information that either the client or server may need.
+
+In this case, you can see that we made an HTTP GET Request to the API, and it responded with an HTTP Status 200 OK. You can also see that the data sent back was JSON, as listed under the "Response Headers" section.
+
+<img src="complete-diagram.png" alt="Populated Chrome Dev Tools Network Tab">
+
+If you hit the preview tab, you can actually view the JSON as a JavaScript Object. The text version you can see in your browser is a string, for JSON is always transmitted and recieved across the web as a string. That's why we have to parse the JSON in our code, to get it into a more readable format - in this case (and in pretty much every case) - a JavaScript Object.
+
+You can also use the Google Chrome Extension "JSON View" to do this automatically. 
+
 #### A word about CORS
 ...
 
