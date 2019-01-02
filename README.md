@@ -8,7 +8,7 @@ We’ll attempt to answer all of these questions and more throughout this articl
 
 ### What is Node.js
 ...
-*Notes:* Node is only an enviroment, or runtime, within which to run normal JavaScript (with minor differences) outside of the browser.
+*Notes:* Node is only an environment, or runtime, within which to run normal JavaScript (with minor differences) outside of the browser.
 
 ### Blocking/Non-Blocking and Synchronous/Asynchronous
 
@@ -183,7 +183,7 @@ makeAPICall('/example')
 ```
 It is important to note that we can't just tack a `.then()` call on to any function and expect it to work. The function we are calling has to actually return a promise, a promise that will fire the `.then()` when that async operation is complete. In this case, `makeAPICall(...)` will do it's thing, firing either the `then()` block or the `catch()` block when completed.
 
-To make `makeAPICall(...)` return a Promise, we assign a function to a variable, where that function is the Promise constructor. Promises can be either *fulfilled* or *rejected*, where fulfilled means that action relating to the promise completed successfully, and rejected meaning the opposite. Once the promise is either fulfilled or rejected, we say it has *settled*, and while waiting for it to settle, perhaps during an async call, we say that the promise is *pending*. 
+To make `makeAPICall(...)` return a Promise, we assign a function to a variable, where that function is the Promise constructor. Promises can be either *fulfilled* or *rejected*, where fulfilled means that the action relating to the promise completed successfully, and rejected meaning the opposite. Once the promise is either fulfilled or rejected, we say it has *settled*, and while waiting for it to settle, perhaps during an async call, we say that the promise is *pending*. 
 
 The Promise constructor takes in one callback function as an argument, which receives two parameters - `resolve` and `reject`, which we will call at a later point in time to fire either the success callback in `.then()`, or the `.then()` failure callback, or `.catch()`, if provided.
 
@@ -529,21 +529,21 @@ A complete list of HTTP Status Codes can be found here: https://httpstatuses.com
 ### JavaScript Events
 ...
 ### The Node Package Manager
-When programming with Node and JavaScript, it'll be quite common to here about `npm`. Npm is a package manager which does just that - permits the downloading of third-party packages that solve common problems in JavaScript. Other solutions, such as Yarn, Npx, Grunt, and Bower exist as well, and in this section, we'll talk about what they are, what their differences are, and how you can install dependencies for your application through a simmple Command Line Interface (CLI) using them. We'll also mention their respective configurations by setting up the dependencies of the Command Line Application we'll be building in the second to last section to actually see how to make API Requests in Node.
+When programming with Node and JavaScript, it'll be quite common to hear about `npm`. Npm is a package manager which does just that - permits the downloading of third-party packages that solve common problems in JavaScript. Other solutions, such as Yarn, Npx, Grunt, and Bower exist as well, and in this section, we'll talk about what they are, what their differences are, and how you can install dependencies for your application through a simple Command Line Interface (CLI) using them. We'll also mention their respective configurations by setting up the dependencies of the Command Line Application we'll be building in the second to last section to actually see how to make API Requests in Node.
 ### MongoDB 
 ...
 ### Building a Command Line Node Application
-When building out an application, you will see many authors dump their entire code base at the beginning of the article, and then attempt to explain each line thereafter. In this text, I'll take a different approach. I'll explain my code line-by-line, building the app as we go. I won't worry about modularity or performance, I won't split the codebase into seperate files, and I won't follow the DRY Principle or attempt to make the code reusable. When just learning, it is useful to make things as simple as possible, and so that is the approach I will take here.
+When building out an application, you will see many authors dump their entire code base at the beginning of the article, and then attempt to explain each line thereafter. In this text, I'll take a different approach. I'll explain my code line-by-line, building the app as we go. I won't worry about modularity or performance, I won't split the codebase into separate files, and I won't follow the DRY Principle or attempt to make the code reusable. When just learning, it is useful to make things as simple as possible, and so that is the approach I will take here.
 
 If you want to see the finished code, visit the GitHub Repository HERE.
 
-If you want to see the refactored version of the code making use of some of the properties in the former paragraph, vist THIS GitHub Respository.
+If you want to see the refactored version of the code making use of some of the properties in the former paragraph, visit THIS GitHub Repository.
 
-Let us be clear about what we are building. We won't be concerned with user input, and so we won't make use of packages like [Yargs](https://www.npmjs.com/package/yargs). We also won't be buillding our own API. That will come in a later article in this series when we make use of the Express Web Application Framework. I take this approach as to not conflate Node.js with the power of Express and APIs, since most tutorials do. Rather, I'll provide two methods (of many) by which to call and recieve data from an external API, the first of which utilizes a third-party JavaScript library, and another which uses a native JavaScript method. The API we'll be calling is a Weather API, which we'll call from Node and dump its output to the terminal, perhaps with some formatting, known as "pretty-printing". I'll cover the entire process, including how to set up the API and attain API Key, the steps of which provide the correct results as of January 2019.
+Let us be clear about what we are building. We won't be concerned with user input, and so we won't make use of packages like [Yargs](https://www.npmjs.com/package/yargs). We also won't be building our own API. That will come in a later article in this series when we make use of the Express Web Application Framework. I take this approach as to not conflate Node.js with the power of Express and APIs since most tutorials do. Rather, I'll provide two methods (of many) by which to call and receive data from an external API, the first of which utilizes a third-party JavaScript library, and another which uses a native JavaScript method. The API we'll be calling is a Weather API, which we'll call from Node and dump its output to the terminal, perhaps with some formatting, known as "pretty-printing". I'll cover the entire process, including how to set up the API and attain API Key, the steps of which provide the correct results as of January 2019.
 
 We'll be using the OpenWeatherMap API for this project, so to get started, navigate to https://home.openweathermap.org/users/sign_up and create an account with the form. Once logged in, find the API Keys menu item on the dashboard page, located at https://home.openweathermap.org/api_keys. If you just created an account, you'll have to pick a name for your API Key and hit "Generate". It could take at least 2 hours for your new API Key to be functional and associated with your account.
 
-Before we start building out the application, we'll vist the API Documentation (https://openweathermap.org/current) to learn how to format our API Key. In this project, we'll be specifiying a zip code and a country code to attain the weather information at that location.
+Before we start building out the application, we'll visit the API Documentation (https://openweathermap.org/current) to learn how to format our API Key. In this project, we'll be specifying a zip code and a country code to attain the weather information at that location.
 
 From the docs, we can see that the method by which we do this is to provide the following URL:
 
@@ -553,31 +553,197 @@ Into which we could input data:
 
 `api.openweathermap.org/data/2.5/weather?zip=94040,us`
 
-Now, before we can actually attain relevant data from this API, we'll need to provide our new API Key as a query paramater:
+Now, before we can actually attain relevant data from this API, we'll need to provide our new API Key as a query parameter:
 
 `api.openweathermap.org/data/2.5/weather?zip=94040,us&appid={YOUR_API_KEY}`
 
 For now, copy that URL into a new tab in your web browser, replacing the `{YOUR_API_KEY}` placeholder with the API Key you obtained earlier when you registered for an account.
 
-The text you can see is actually JSON - the agreed upon langauge of the web as dicussed earlier.
+The text you can see is actually JSON - the agreed upon language of the web as discussed earlier.
 
 To inspect this further, hit `Ctrl + Shift + I` in Google Chrome to open the Chrome Developer tools, and then navigate to the Network tab. At present, there should be no data here.
 
 <img src="net-activity.png" alt="Empty Chrome Dev Tools Network Tab">
 
-To actually montior network data, reload the page, and watch the tab be populated with useful information. Click the first link as depicted in the image below.
+To actually monitor network data, reload the page, and watch the tab be populated with useful information. Click the first link as depicted in the image below.
 
 <img src="pop-net-activity.png" alt="Populated Chrome Dev Tools Network Tab">
 
-Once you click on that link, we can actually view HTTP specific information, such as the headers. Headers are sent in the response from the API (you can also, in some cases, send your own headers to the API, or you can even created your own custom headers (often prefixed with `x-`) to send back when building your own API), and just contain extra information that either the client or server may need.
+Once you click on that link, we can actually view HTTP specific information, such as the headers. Headers are sent in the response from the API (you can also, in some cases, send your own headers to the API, or you can even create your own custom headers (often prefixed with `x-`) to send back when building your own API), and just contain extra information that either the client or server may need.
 
 In this case, you can see that we made an HTTP GET Request to the API, and it responded with an HTTP Status 200 OK. You can also see that the data sent back was JSON, as listed under the "Response Headers" section.
 
 <img src="complete-diagram.png" alt="Populated Chrome Dev Tools Network Tab">
 
-If you hit the preview tab, you can actually view the JSON as a JavaScript Object. The text version you can see in your browser is a string, for JSON is always transmitted and recieved across the web as a string. That's why we have to parse the JSON in our code, to get it into a more readable format - in this case (and in pretty much every case) - a JavaScript Object.
+If you hit the preview tab, you can actually view the JSON as a JavaScript Object. The text version you can see in your browser is a string, for JSON is always transmitted and received across the web as a string. That's why we have to parse the JSON in our code, to get it into a more readable format - in this case (and in pretty much every case) - a JavaScript Object.
 
 You can also use the Google Chrome Extension "JSON View" to do this automatically. 
+
+To start building out our application, I'll open a terminal and make a new root directory and then `cd` into it. Once inside, I'll create a new `app.js` file, run `npm init` to generate a `package.json` file with the default settings, and then open Visual Studio Code
+
+```
+mkdir command-line-weather-app && cd command-line-weather-app
+touch app.js
+npm init
+code .
+```
+Thereafter, I'll download Axios, verify it has been added to my `package.json` file, and note that the `node_modules` folder has been created successfully.
+
+In the browser, you can see that we made a GET Request by hand by manually typing the proper URL into the URL Bar. [Axios](https://www.npmjs.com/package/axios) is what will allow me to do that inside of Node.
+
+Starting now, all of the following code will be located inside of the `app.js` file, each snippet placed after the other.
+
+The first thing I'll do is require the Axios package we installed earlier with
+
+```javascript
+const axios = require('axios');
+```
+We now have access to Axios, and can make relevant HTTP Requests, via the `axios` constant.
+
+Generally, our API calls will be dynamic - in this case, we might want to inject different zip codes and country codes into our URL. So, I'll be creating constant variables for each part of the URL, and then put them together with ES6 Template Strings. First, we have the part of our URL that will never change as well as our API Key:
+
+```javascript
+const API_URL = 'https://api.openweathermap.org/data/2.5/weather?zip=';
+const API_KEY = 'Your API Key Here';
+```
+I'll also assign our zip code and country code. Since we are not expecting user input and are rather hard coding the data, I'll make these constant as well, although, in many cases, it will be more useful to use `let`.
+
+```javascript
+const LOCATION_ZIP_CODE = '90001';
+const COUNTRY_CODE = 'us';
+```
+We now need to put these variables together into one URL to which we can use Axios to make GET Requests to:
+
+```javascript
+const ENTIRE_API_URL = `${API_URL}${LOCATION_ZIP_CODE},${COUNTRY_CODE}&appid=${API_KEY}`;
+```
+Here is the contents of our `app.js` file up to this point:
+
+```javascript
+const axios = require('axios');
+
+// API specific settings.
+const API_URL = 'https://api.openweathermap.org/data/2.5/weather?zip=';
+const API_KEY = 'Your API Key Here';
+
+const LOCATION_ZIP_CODE = '90001';
+const COUNTRY_CODE = 'us';
+
+const ENTIRE_API_URL = `${API_URL}${LOCATION_ZIP_CODE},${COUNTRY_CODE}&appid=${API_KEY}`;
+```
+All that is left to do is to actually use `axios` to make a GET Request to that URL. For that, we'll use the `get(url)` method provided by `axios`.
+
+```javascript
+axios.get(ENTIRE_API_URL)
+```
+`axios.get(...)` actually returns a Promise, and the success callback function will take in a response argument which will allow us to access the response from the API - the same thing you saw in the browser. I'll also add a `.catch()` clause to catch any errors.
+
+```javascript
+axios.get(ENTIRE_API_URL)
+    .then(response => console.log(response))
+    .catch(error => console.log('Error', error));
+```
+If we now run this code with `node app.js` in the terminal, you will be able to see the full response we get back. However, suppose you just want to see the temperature for that zip code - then most of that data in the response is not useful to you. Axios actually returns the response from the API in the data object, which is a property of the response. That means the response from the server is actually located at `response.data`, so let's print that instead in the callback function: `console.log(response.data)`.
+
+Now, we said that web servers always deal with JSON as a string, and that is true. You might notice, however, that `response.data` is already an object (evident by running `console.log(typeof response.data)`) - we didn't have to parse it with `JSON.parse()`. That is because Axios already takes care of this for us behind the scenes.
+
+The output in the terminal from running `console.log(response.data)` can be formatted - "pretty-printed" - by running `console.log(JSON.stringify(response.data, undefined, 2))`. `JSON.stringify()` converts a JSON object into a string, and take in the object, a filter, and the number of characters by which to indent by when printing. You can see the response this provides:
+
+```
+{
+  "coord": {
+    "lon": -118.24,
+    "lat": 33.97
+  },
+  "weather": [
+    {
+      "id": 800,
+      "main": "Clear",
+      "description": "clear sky",
+      "icon": "01d"
+    }
+  ],
+  "base": "stations",
+  "main": {
+    "temp": 288.21,
+    "pressure": 1022,
+    "humidity": 15,
+    "temp_min": 286.15,
+    "temp_max": 289.75
+  },
+  "visibility": 16093,
+  "wind": {
+    "speed": 2.1,
+    "deg": 110
+  },
+  "clouds": {
+    "all": 1
+  },
+  "dt": 1546459080,
+  "sys": {
+    "type": 1,
+    "id": 4361,
+    "message": 0.0072,
+    "country": "US",
+    "sunrise": 1546441120,
+    "sunset": 1546476978
+  },
+  "id": 420003677,
+  "name": "Lynwood",
+  "cod": 200
+}
+```
+Now, it is clear to see that the temperature we are looking for is located on the `main` property of the object, so we can access it by calling `response.data.main.temp`. Let's look at out application's code up to now:
+
+```javascript
+const axios = require('axios');
+
+// API specific settings.
+const API_URL = 'https://api.openweathermap.org/data/2.5/weather?zip=';
+const API_KEY = 'Your API Key Here';
+
+const LOCATION_ZIP_CODE = '90001';
+const COUNTRY_CODE = 'us';
+
+const ENTIRE_API_URL = `${API_URL}${LOCATION_ZIP_CODE},${COUNTRY_CODE}&appid=${API_KEY}`;
+
+axios.get(ENTIRE_API_URL)
+    .then(response => console.log(response.data.main.temp))
+    .catch(error => console.log('Error', error));
+```
+The temperature we get back is actually in Kelvin, which is a temperature scale generally used in Physics, Chemistry, and Thermodynamics due to the fact that it provides an "absolute zero" point, which is the temperature at which all thermal motion of all inner particles cease. We just need to convert this to Fahrenheit or Celcius with the formulas below:
+
+`F = K * 9/5 - 459.67`
+`C = K - 273.15`
+
+Let's update our success callback to print the new data with this conversion. We'll also add in a proper sentence for the purposes of User Experience:
+
+```javascript
+axios.get(ENTIRE_API_URL)
+    .then(res => {
+        // Getting the current temperature and the city from the response object.
+        const kelvinTemperature = res.data.main.temp;
+        const cityName = res.data.name;
+
+        // Making K to F and K to C conversions.
+        const farenheitTemperature = (kelvinTemperature * 9/5) - 459.67;
+        const celciusTemperature = kelvinTemperature - 273.15;
+
+        // Building the final message.
+        const message = (
+            `Right now, in \
+            ${cityName}, the current temperature is \
+            ${farenheitTemperature.toFixed(2)} deg F or \
+            ${celciusTemperature.toFixed(2)} deg C.`.replace(/\s+/g, ' ')
+        );
+
+        console.log(message);
+    })
+    .catch(err => console.log('err', err));
+```
+
+
+
 
 #### A word about CORS
 ...
