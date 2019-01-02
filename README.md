@@ -533,13 +533,18 @@ When programming with Node and JavaScript, it'll be quite common to here about `
 ### MongoDB 
 ...
 ### Building a Command Line Node Application
-When building out an application, you will see many authors dump their entire code base at the beginning of the article, and then attempt to explain each line thereafter. In this text, I'll take a different approach. I won't worry about modularity or performance, I won't split the code base into seperate files, and I won't follow the DRY Principle or attempt to make the code reusable. When just learning, it is useful to make things as simple as possible, and so that is the approach I will take here.
+When building out an application, you will see many authors dump their entire code base at the beginning of the article, and then attempt to explain each line thereafter. In this text, I'll take a different approach. I'll explain my code line-by-line, building the app as we go. I won't worry about modularity or performance, I won't split the codebase into seperate files, and I won't follow the DRY Principle or attempt to make the code reusable. When just learning, it is useful to make things as simple as possible, and so that is the approach I will take here.
 
 If you want to see the finished code, visit the GitHub Repository HERE.
 
 If you want to see the refactored version of the code making use of some of the properties in the former paragraph, vist THIS GitHub Respository.
 
 Let us be clear about what we are building. We won't be concerned with user input, and so we won't make use of packages like [Yargs](https://www.npmjs.com/package/yargs). We also won't be buillding our own API. That will come in a later article in this series when we make use of the Express Web Application Framework. I take this approach as to not conflate Node.js with the power of Express and APIs, since most tutorials do. Rather, I'll provide two methods (of many) by which to call and recieve data from an external API, the first of which utilizes a third-party JavaScript library, and another which uses a native JavaScript method. The API we'll be calling is a Weather API, which we'll call from Node and dump its output to the terminal, perhaps with some formatting, known as "pretty-printing". I'll cover the entire process, including how to set up the API and attain API Key, the steps of which provide the correct results as of January 2019.
+
+We'll be using the OpenWeatherMap API for this project, so to get started, navigate to https://home.openweathermap.org/users/sign_up and create an account with the form. Once logged in, find the API Keys menu item on the dashboard page, located at https://home.openweathermap.org/api_keys. If you just created an account, you'll have to pick a name for your API Key and hit "Generate". It could take at least 2 hours for your new API Key to be functional and associated with your account.
+
+Before we start building out the application, we'll vist the API Documentation (https://openweathermap.org/current) to learn how to format our API Key. In this project, we'll be specifiying a zip code and a country code to attain the weather information at that location.
+
 
 ### Conclusion
 ...
