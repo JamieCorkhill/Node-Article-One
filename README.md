@@ -741,7 +741,7 @@ axios.get(ENTIRE_API_URL)
     })
     .catch(err => console.log('err', err));
 ```
-The parentheses around the `message` variable are not required, they just look nice - similar to when working with JSX in React. The blackslashes stop the template string from formatting a new line, and the `replace()` prototype method gets rid of white space using Regular Expressions (RegEx).
+The parentheses around the `message` variable are not required, they just look nice - similar to when working with JSX in React. The blackslashes stop the template string from formatting a new line, and the `replace()` String prototype method gets rid of white space using Regular Expressions (RegEx). The `toFixed()` Number prototype methods rounds a float to a specific number of decimal places - in this case, two.
 
 With that, our final `app.js` looks as follows:
 
