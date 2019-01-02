@@ -545,6 +545,8 @@ We'll be using the OpenWeatherMap API for this project, so to get started, navig
 
 Before we start building out the application, we'll vist the API Documentation (https://openweathermap.org/current) to learn how to format our API Key. In this project, we'll be specifiying a zip code and a country code to attain the weather information at that location.
 
+#### A word about CORS
+...
 
 ### Conclusion
 ...
