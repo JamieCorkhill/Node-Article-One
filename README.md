@@ -448,6 +448,14 @@ const Person = {
 
 Person.greeting() //Hi. My name is John Doe.
 ```
+### Node APIs, the Callstack, and the Event Loop
+We know that the popularity of Node centers around its non-blocking and asyncrhonous nature, and the Callstack and the Event Loop are what permit that. We'll start with the Callstack.
+
+The Callstack is often just refered to as the "Stack", and it is a common data structure (similar to an array) within which items are stored. Unlike an array, however, it follows the rule: LIFO. LIFO stands for "Last In, First Out", meaning that when a new item is pushed onto the stack, it will be the first to be removed (popped) of the stack.
+### JavaScript Events
+...
+### The Node Package Manager
+When programming with Node and JavaScript, it'll be quite common to hear about `npm`. Npm is a package manager which does just that - permits the downloading of third-party packages that solve common problems in JavaScript. Other solutions, such as Yarn, Npx, Grunt, and Bower exist as well, and in this section, we'll talk about what they are, what their differences are, and how you can install dependencies for your application through a simple Command Line Interface (CLI) using them. We'll also mention their respective configurations by setting up the dependencies of the Command Line Application we'll be building in the second to last section to actually see how to make API Requests in Node.
 ### (Optional) Javascript Classes & `this` Binding
 ...
 ### APIs & JSON
@@ -524,12 +532,6 @@ It is also important to note that after making an HTTP Request, we'll receive a 
 
 A complete list of HTTP Status Codes can be found here: https://httpstatuses.com/
 
-### Node APIs, the Callstack, and the Event Loop
-...
-### JavaScript Events
-...
-### The Node Package Manager
-When programming with Node and JavaScript, it'll be quite common to hear about `npm`. Npm is a package manager which does just that - permits the downloading of third-party packages that solve common problems in JavaScript. Other solutions, such as Yarn, Npx, Grunt, and Bower exist as well, and in this section, we'll talk about what they are, what their differences are, and how you can install dependencies for your application through a simple Command Line Interface (CLI) using them. We'll also mention their respective configurations by setting up the dependencies of the Command Line Application we'll be building in the second to last section to actually see how to make API Requests in Node.
 ### MongoDB 
 ...
 ### Building a Command Line Node Application
@@ -693,7 +695,7 @@ The output in the terminal from running `console.log(response.data)` can be form
   "cod": 200
 }
 ```
-Now, it is clear to see that the temperature we are looking for is located on the `main` property of the object, so we can access it by calling `response.data.main.temp`. Let's look at out application's code up to now:
+Now, it is clear to see that the temperature we are looking for is located on the `main` property of the `response.data` object, so we can access it by calling `response.data.main.temp`. Let's look at out application's code up to now:
 
 ```javascript
 const axios = require('axios');
@@ -720,26 +722,27 @@ Let's update our success callback to print the new data with this conversion. We
 
 ```javascript
 axios.get(ENTIRE_API_URL)
-    .then(res => {
+    .then(response => {
         // Getting the current temperature and the city from the response object.
-        const kelvinTemperature = res.data.main.temp;
-        const cityName = res.data.name;
+        const kelvinTemperature = response.data.main.temp;
+        const cityName = response.data.name;
+        const countryName = response.data.sys.country;
 
         // Making K to F and K to C conversions.
-        const farenheitTemperature = (kelvinTemperature * 9/5) - 459.67;
+        const fahrenheitTemperature = (kelvinTemperature * 9/5) - 459.67;
         const celciusTemperature = kelvinTemperature - 273.15;
 
         // Building the final message.
         const message = (
             `Right now, in \
-            ${cityName}, the current temperature is \
-            ${farenheitTemperature.toFixed(2)} deg F or \
+            ${cityName}, ${countryName} the current temperature is \
+            ${fahrenheitTemperature.toFixed(2)} deg F or \
             ${celciusTemperature.toFixed(2)} deg C.`.replace(/\s+/g, ' ')
         );
 
         console.log(message);
     })
-    .catch(err => console.log('err', err));
+    .catch(error => console.log('Error', error));
 ```
 The parentheses around the `message` variable are not required, they just look nice - similar to when working with JSX in React. The blackslashes stop the template string from formatting a new line, and the `replace()` String prototype method gets rid of white space using Regular Expressions (RegEx). The `toFixed()` Number prototype methods rounds a float to a specific number of decimal places - in this case, two.
 
@@ -758,29 +761,30 @@ const COUNTRY_CODE = 'us';
 const ENTIRE_API_URL = `${API_URL}${LOCATION_ZIP_CODE},${COUNTRY_CODE}&appid=${API_KEY}`;
 
 axios.get(ENTIRE_API_URL)
-    .then(res => {
+    .then(response => {
         // Getting the current temperature and the city from the response object.
-        const kelvinTemperature = res.data.main.temp;
-        const cityName = res.data.name;
+        const kelvinTemperature = response.data.main.temp;
+        const cityName = response.data.name;
+        const countryName = response.data.sys.country;
 
         // Making K to F and K to C conversions.
-        const farenheitTemperature = (kelvinTemperature * 9/5) - 459.67;
+        const fahrenheitTemperature = (kelvinTemperature * 9/5) - 459.67;
         const celciusTemperature = kelvinTemperature - 273.15;
 
         // Building the final message.
         const message = (
             `Right now, in \
-            ${cityName}, the current temperature is \
-            ${farenheitTemperature.toFixed(2)} deg F or \
+            ${cityName}, ${countryName} the current temperature is \
+            ${fahrenheitTemperature.toFixed(2)} deg F or \
             ${celciusTemperature.toFixed(2)} deg C.`.replace(/\s+/g, ' ')
         );
 
         console.log(message);
     })
-    .catch(err => console.log('err', err));
+    .catch(error => console.log('Error', error));
 ```
 
-#### A word about CORS
+### A word about CORS
 ...
 
 ### Conclusion
