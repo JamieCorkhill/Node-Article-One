@@ -533,7 +533,8 @@ It is also important to note that after making an HTTP Request, we'll receive a 
 A complete list of HTTP Status Codes can be found here: https://httpstatuses.com/
 
 ### MongoDB 
-...
+MongoDB is a non-relational, NoSQL database similar to the Firebase Realtime Database. You will talk to the database via a Node package such as the MongoDB Native Driver or Mngoose.
+
 ### Building a Command Line Node Application
 When building out an application, you will see many authors dump their entire code base at the beginning of the article, and then attempt to explain each line thereafter. In this text, I'll take a different approach. I'll explain my code line-by-line, building the app as we go. I won't worry about modularity or performance, I won't split the codebase into separate files, and I won't follow the DRY Principle or attempt to make the code reusable. When just learning, it is useful to make things as simple as possible, and so that is the approach I will take here.
 
