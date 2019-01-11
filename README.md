@@ -456,6 +456,9 @@ The Callstack is often just refered to as the "Stack", and it is a common data s
 ...
 ### The Node Package Manager
 When programming with Node and JavaScript, it'll be quite common to hear about `npm`. Npm is a package manager which does just that - permits the downloading of third-party packages that solve common problems in JavaScript. Other solutions, such as Yarn, Npx, Grunt, and Bower exist as well, and in this section, we'll talk about what they are, what their differences are, and how you can install dependencies for your application through a simple Command Line Interface (CLI) using them. We'll also mention their respective configurations by setting up the dependencies of the Command Line Application we'll be building in the second to last section to actually see how to make API Requests in Node.
+
+Let's start simple, with just `npm`. Visit https://www.npmjs.com/ to view all of the packages available from NPM. When you start a new project that will depend on NPM Packages, you'll have to run `npm init` through the terminal in your project's root directory. You will be asked a series of questions which will be used to create a `package.json` file.
+
 ### (Optional) Javascript Classes & `this` Binding
 ...
 ### APIs & JSON
