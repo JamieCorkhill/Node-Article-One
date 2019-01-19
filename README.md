@@ -453,14 +453,18 @@ We know that the popularity of Node centers around its non-blocking and asyncrho
 
 The Callstack is often just refered to as the "Stack", and it is a common data structure (similar to an array) within which items are stored. Unlike an array, however, it follows the rule: LIFO. LIFO stands for "Last In, First Out", meaning that when a new item is pushed onto the stack, it will be the first to be removed (popped) of the stack.
 ### JavaScript Events
-...
+An Event is an action that occurs to which you have the ability to respond. Suppose you are building a login form for your application. When the users presses the "submit" button, you can react to that event via an "event handler" in your code - typically a function. When this function is defined as the event handler, we say we are "registering an event handler".
 ### The Node Package Manager
-When programming with Node and JavaScript, it'll be quite common to hear about `npm`. Npm is a package manager which does just that - permits the downloading of third-party packages that solve common problems in JavaScript. Other solutions, such as Yarn, Npx, Grunt, and Bower exist as well, and in this section, we'll talk about what they are, what their differences are, and how you can install dependencies for your application through a simple Command Line Interface (CLI) using them. We'll also mention their respective configurations by setting up the dependencies of the Command Line Application we'll be building in the second to last section to actually see how to make API Requests in Node.
+When programming with Node and JavaScript, it'll be quite common to hear about `npm`. Npm is a package manager which does just that - permits the downloading of third-party packages that solve common problems in JavaScript. Other solutions, such as Yarn, Npx, Grunt, and Bower exist as well, but in this section, we'll focus only on `npm` and how you can install dependencies for your application through a simple Command Line Interface (CLI) using it.
 
-Let's start simple, with just `npm`. Visit https://www.npmjs.com/ to view all of the packages available from NPM. When you start a new project that will depend on NPM Packages, you'll have to run `npm init` through the terminal in your project's root directory. You will be asked a series of questions which will be used to create a `package.json` file.
+Let's start simple, with just `npm`. Visit https://www.npmjs.com/ to view all of the packages available from NPM. When you start a new project that will depend on NPM Packages, you'll have to run `npm init` through the terminal in your project's root directory. You will be asked a series of questions which will be used to create a `package.json` file. This file stores all of your dependencies - modules that your application depends on to function, scripts - pre-defined terminal commands to run tests, build the project, start the development server, etc., and more.
 
-### (Optional) Javascript Classes & `this` Binding
-...
+To install a package, simply run `npm install [package-name] --save`. The `save` flag will ensure the package and its version is logged in the `package.json` file. You will also notice a new `node_modules` folder, containing the code for that package you just installed. This can also be shortened to just `npm i [package-name]`. As a helpful note, the `node_modules` folder should never be included in a GitHub respository due to its size. Whenever you clone a repo from GitHub (or any other version mangagement system), be sure to run the command `npm install` to go out and fetch all the packages defined in the `package.json` file, creating the `node_modules` directory. You can also install a package at a specific version: `npm i [package-name]@1.10.1 --save`, for example.
+
+Removing a package is similar to installing one: `npm remove [package-name]`.
+
+You can also install a package globally. This will package will be available across all projects, not just the one your working on. You do this with the `-g` flag after `npm i [package-name]. This is commonly used for CLIs, such as Google Firebase and Heroku.
+
 ### APIs & JSON
 APIs are a very common paradigm in programming, and even if you are just starting out in your career as a developer, APIs and their usage, especially in web and mobile development, will likely come up more often than not.
 
