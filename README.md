@@ -453,17 +453,87 @@ We know that the popularity of Node centers around its non-blocking and asyncrho
 
 The Callstack is often just refered to as the "Stack", and it is a common data structure (similar to an array) within which items are stored. Unlike an array, however, it follows the rule: LIFO. LIFO stands for "Last In, First Out", meaning that when a new item is pushed onto the stack, it will be the first to be removed (popped) of the stack.
 ### JavaScript Events
-An Event is an action that occurs to which you have the ability to respond. Suppose you are building a login form for your application. When the users presses the "submit" button, you can react to that event via an "event handler" in your code - typically a function. When this function is defined as the event handler, we say we are "registering an event handler".
+An Event is an action that occurs to which you have the ability to respond. Suppose you are building a login form for your application. When the users presses the "submit" button, you can react to that event via an "event handler" in your code - typically a function. When this function is defined as the event handler, we say we are "registering an event handler". The event handler for the submit button click will likely check the the formatting of the input provided by the user, sanitize it to prevent such attacks as SQL Injections or Cross Site Scripting, and then check to see if that username and password combination exits within a database to authenticate a user and serve them a token.
+
+Since this is an article about Node, we'll focus on the (Node Event Model)["https://nodejs.org/docs/latest-v5.x/api/events.html"].
+
+We can use the `events` module from Node to emit and react to specific events. Any object that emits an event is an instance of the `EventEmitter` class.
+
+We can emit an event by calling the `emit()` method and we listen for that e vent via the `on()` method, both of which are exposed through the `EventEmitter` class.
+
+```javascript
+const EventEmitter = require('events');
+
+const myEmitter = new EventEmitter();
+```
+With `myEmitter` now an instance of the `EventEmitter` class, we can access `emit()` and `on()`:
+
+```javascript
+const EventEmitter = require('events');
+
+const myEmitter = new EventEmitter();
+
+myEmitter.on('someEvent', () => {
+  console.log('The "someEvent" event was fired (emitted)');
+});
+
+myEmitter.emit('someEvent');
+```
+The second paramter to `myEmitter.on()` is the callback function that will fire when the event is emitted - this is the event handler. The first paramter is the name of the event, which can be anything we like, although the camelCase naming convention is reccomnded.
+
+Additionally, the event handler can take any number of arguments, which are passed down when the event is emitted:
+
+```javascript
+const EventEmitter = require('events');
+
+const myEmitter = new EventEmitter();
+
+myEmitter.on('someEvent', (data) => {
+  console.log(`The "someEvent" event was fired (emitted) with data: ${data}`);
+});
+
+myEmitter.emit('someEvent', 'This is the data payload');
+```
+By using inheritance, we can expose the `emit()` and `on()` methods from 'EventEmitter' to any class. This is done by creating a Node.js class, and using the `extends` reserved keyword to inherit the properties available on `EventEmitter`:
+
+```javascript
+const EventEmitter = require('events');
+
+class MyEmitter extends EventEmitter {
+  // This is my class. I can emit events from a MyEmitter object.
+}
+```
+Suppose I am building a vehicle collision notification program. When a vechile collides with an object, external sensors will detect the crash, executing the `collide(...)` function and passing to it the aggregated sensor data as a nice JavaScript Object. This function will emit a `collision` event, notifying the vendor of the crash.
+
+```javascript
+const EventEmitter = require('events');
+
+class Vechicle extends EventEmitter {
+  collide(collisionStatistics) {
+    this.emit('collision', collisionStatistics)
+  }
+}
+
+const myVehicle = new Vehicle();
+myVehicle.on('collision', collisionStatistics => {
+  console.note('WARNING! Vehicle Impact Detected: ', collisionStatistics);
+  notifyVendor(collisionStatistics);
+});
+
+myVehicle.collide({ ... });
+```
+This is a convoluted example for we could just put the code within the event handler inside the collide function of the class, but it demonstrates how the Node Event Model functions nontheless. Note that some tutorials will show the `util.inherits()` method of permitting an object to emit events. That has been deprecated in favor of ES6 Classes and `extends`.
+
 ### The Node Package Manager
 When programming with Node and JavaScript, it'll be quite common to hear about `npm`. Npm is a package manager which does just that - permits the downloading of third-party packages that solve common problems in JavaScript. Other solutions, such as Yarn, Npx, Grunt, and Bower exist as well, but in this section, we'll focus only on `npm` and how you can install dependencies for your application through a simple Command Line Interface (CLI) using it.
 
 Let's start simple, with just `npm`. Visit https://www.npmjs.com/ to view all of the packages available from NPM. When you start a new project that will depend on NPM Packages, you'll have to run `npm init` through the terminal in your project's root directory. You will be asked a series of questions which will be used to create a `package.json` file. This file stores all of your dependencies - modules that your application depends on to function, scripts - pre-defined terminal commands to run tests, build the project, start the development server, etc., and more.
 
-To install a package, simply run `npm install [package-name] --save`. The `save` flag will ensure the package and its version is logged in the `package.json` file. You will also notice a new `node_modules` folder, containing the code for that package you just installed. This can also be shortened to just `npm i [package-name]`. As a helpful note, the `node_modules` folder should never be included in a GitHub respository due to its size. Whenever you clone a repo from GitHub (or any other version mangagement system), be sure to run the command `npm install` to go out and fetch all the packages defined in the `package.json` file, creating the `node_modules` directory. You can also install a package at a specific version: `npm i [package-name]@1.10.1 --save`, for example.
+To install a package, simply run `npm install [package-name] --save`. The `save` flag will ensure the package and its version is logged in the `package.json` file. Since `npm` version 5, dependencies are saved by default, so `--save` may be omitted. You will also notice a new `node_modules` folder, containing the code for that package you just installed. This can also be shortened to just `npm i [package-name]`. As a helpful note, the `node_modules` folder should never be included in a GitHub respository due to its size. Whenever you clone a repo from GitHub (or any other version mangagement system), be sure to run the command `npm install` to go out and fetch all the packages defined in the `package.json` file, creating the `node_modules` directory automatically. You can also install a package at a specific version: `npm i [package-name]@1.10.1 --save`, for example.
 
 Removing a package is similar to installing one: `npm remove [package-name]`.
 
-You can also install a package globally. This will package will be available across all projects, not just the one your working on. You do this with the `-g` flag after `npm i [package-name]. This is commonly used for CLIs, such as Google Firebase and Heroku.
+You can also install a package globally. This package will be available across all projects, not just the one your working on. You do this with the `-g` flag after `npm i [package-name]`. This is commonly used for CLIs, such as Google Firebase and Heroku. Despite the ease this method presents, it is generally considered bad practice to install packages globally, for they are not saved in the `package.json` file, and if another developer attempts to use your project, they won't attain all the required dependencies from `npm install`. 
 
 ### APIs & JSON
 APIs are a very common paradigm in programming, and even if you are just starting out in your career as a developer, APIs and their usage, especially in web and mobile development, will likely come up more often than not.
