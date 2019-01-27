@@ -2,13 +2,12 @@
 
 You’ve probably heard of Node.js as being an “asynchronous JavaScript runtime built on Chrome’s V8 JavaScript engine”, and that it “uses an event-driven, non-blocking I/O model that makes it lightweight and efficient”. But for some, that is not the greatest of explanations. 
 
-What exactly does it mean for Node to be “asynchronous”, and how does that differ from “synchronous”? What is Google Chrome’s V8 JavaScript Engine, and what is the meaning “event-driven” and “non-blocking” anyway?
+What is Node in the first place? What exactly does it mean for Node to be “asynchronous”, and how does that differ from “synchronous”? What is the meaning “event-driven” and “non-blocking” anyway, and how does Node fit into the bigger picture of applications, Internet networks, and servers?
 
-We’ll attempt to answer all of these questions and more throughout this article as we build a simple Bookshelf API utilizing a variety of third-party NPM modules – including Express, Mongoose, and Lodash.
+We’ll attempt to answer all of these questions and more throughout this series as we take an in-depth look at the inner workings of Node, learn about the HyperText Transfer Protocol, APIs, and JSON, and build our very own Bookshelf API utilizing MongoDB, Express, Lodash, Mocha, and Handlebars.
 
 ### What is Node.js
-...
-*Notes:* Node is only an environment, or runtime, within which to run normal JavaScript (with minor differences) outside of the browser.
+Node is only an environment, or runtime, within which to run normal JavaScript (with minor differences) outside of the browser. We can use it to build desktop applications (with frameworks like Electron), write web or app servers, and more.
 
 ### Blocking/Non-Blocking and Synchronous/Asynchronous
 
@@ -20,7 +19,7 @@ Let's look at another example of a *synchronous* call that *blocks* a thread. Su
 
 <img src="SyncBlock.png" alt="Sync Blocking Ops">
 
-Allow me to note, it's important to recognize that not all synchronous calls are necessarily blocking. If a synchronous operation can manage to complete without blocking the thread or causing a wait state, it was non-blocking. Most of the time, synchronous calls will be blocking, and the time they take to complete will depend on a variety of factors, such as the speed of the API's servers, the end user's internet connection download speed, etc.
+Allow me to note, it's important to recognize that not all synchronous calls are necessarily blocking. If an asynchronous operation can manage to complete without blocking the thread or causing a wait state, it was non-blocking. Most of the time, synchronous calls will be blocking, and the time they take to complete will depend on a variety of factors, such as the speed of the API's servers, the end user's internet connection download speed, etc.
 
 In the case of the image above, we had to wait quite a while to retrieve the first results from API One. Thereafter, we had to wait equally as long to get a response from API Two. While waiting for both responses, the user would notice our application hang, and this is bad for User Experience.
 
@@ -448,18 +447,14 @@ const Person = {
 
 Person.greeting() //Hi. My name is John Doe.
 ```
-### Node APIs, the Callstack, and the Event Loop
-We know that the popularity of Node centers around its non-blocking and asyncrhonous nature, and the Callstack and the Event Loop are what permit that. We'll start with the Callstack.
-
-The Callstack is often just refered to as the "Stack", and it is a common data structure (similar to an array) within which items are stored. Unlike an array, however, it follows the rule: LIFO. LIFO stands for "Last In, First Out", meaning that when a new item is pushed onto the stack, it will be the first to be removed (popped) of the stack.
 ### JavaScript Events
-An Event is an action that occurs to which you have the ability to respond. Suppose you are building a login form for your application. When the users presses the "submit" button, you can react to that event via an "event handler" in your code - typically a function. When this function is defined as the event handler, we say we are "registering an event handler". The event handler for the submit button click will likely check the the formatting of the input provided by the user, sanitize it to prevent such attacks as SQL Injections or Cross Site Scripting, and then check to see if that username and password combination exits within a database to authenticate a user and serve them a token.
+An Event is an action that occurs to which you have the ability to respond. Suppose you are building a login form for your application. When the user presses the "submit" button, you can react to that event via an "event handler" in your code - typically a function. When this function is defined as the event handler, we say we are "registering an event handler". The event handler for the submit button click will likely check the the formatting of the input provided by the user, sanitize it to prevent such attacks as SQL Injections or Cross Site Scripting, and then check to see if that username and password combination exits within a database to authenticate a user and serve them a token.
 
 Since this is an article about Node, we'll focus on the (Node Event Model)["https://nodejs.org/docs/latest-v5.x/api/events.html"].
 
 We can use the `events` module from Node to emit and react to specific events. Any object that emits an event is an instance of the `EventEmitter` class.
 
-We can emit an event by calling the `emit()` method and we listen for that e vent via the `on()` method, both of which are exposed through the `EventEmitter` class.
+We can emit an event by calling the `emit()` method and we listen for that event via the `on()` method, both of which are exposed through the `EventEmitter` class.
 
 ```javascript
 const EventEmitter = require('events');
@@ -479,7 +474,7 @@ myEmitter.on('someEvent', () => {
 
 myEmitter.emit('someEvent');
 ```
-The second paramter to `myEmitter.on()` is the callback function that will fire when the event is emitted - this is the event handler. The first paramter is the name of the event, which can be anything we like, although the camelCase naming convention is reccomnded.
+The second parameter to `myEmitter.on()` is the callback function that will fire when the event is emitted - this is the event handler. The first parameter is the name of the event, which can be anything we like, although the camelCase naming convention is recommended.
 
 Additionally, the event handler can take any number of arguments, which are passed down when the event is emitted:
 
@@ -503,12 +498,12 @@ class MyEmitter extends EventEmitter {
   // This is my class. I can emit events from a MyEmitter object.
 }
 ```
-Suppose I am building a vehicle collision notification program. When a vechile collides with an object, external sensors will detect the crash, executing the `collide(...)` function and passing to it the aggregated sensor data as a nice JavaScript Object. This function will emit a `collision` event, notifying the vendor of the crash.
+Suppose I am building a vehicle collision notification program. When a vehicle collides with an object, external sensors will detect the crash, executing the `collide(...)` function and passing to it the aggregated sensor data as a nice JavaScript Object. This function will emit a `collision` event, notifying the vendor of the crash.
 
 ```javascript
 const EventEmitter = require('events');
 
-class Vechicle extends EventEmitter {
+class Vehicle extends EventEmitter {
   collide(collisionStatistics) {
     this.emit('collision', collisionStatistics)
   }
@@ -522,14 +517,14 @@ myVehicle.on('collision', collisionStatistics => {
 
 myVehicle.collide({ ... });
 ```
-This is a convoluted example for we could just put the code within the event handler inside the collide function of the class, but it demonstrates how the Node Event Model functions nontheless. Note that some tutorials will show the `util.inherits()` method of permitting an object to emit events. That has been deprecated in favor of ES6 Classes and `extends`.
+This is a convoluted example for we could just put the code within the event handler inside the collide function of the class, but it demonstrates how the Node Event Model functions nonetheless. Note that some tutorials will show the `util.inherits()` method of permitting an object to emit events. That has been deprecated in favor of ES6 Classes and `extends`.
 
 ### The Node Package Manager
 When programming with Node and JavaScript, it'll be quite common to hear about `npm`. Npm is a package manager which does just that - permits the downloading of third-party packages that solve common problems in JavaScript. Other solutions, such as Yarn, Npx, Grunt, and Bower exist as well, but in this section, we'll focus only on `npm` and how you can install dependencies for your application through a simple Command Line Interface (CLI) using it.
 
 Let's start simple, with just `npm`. Visit https://www.npmjs.com/ to view all of the packages available from NPM. When you start a new project that will depend on NPM Packages, you'll have to run `npm init` through the terminal in your project's root directory. You will be asked a series of questions which will be used to create a `package.json` file. This file stores all of your dependencies - modules that your application depends on to function, scripts - pre-defined terminal commands to run tests, build the project, start the development server, etc., and more.
 
-To install a package, simply run `npm install [package-name] --save`. The `save` flag will ensure the package and its version is logged in the `package.json` file. Since `npm` version 5, dependencies are saved by default, so `--save` may be omitted. You will also notice a new `node_modules` folder, containing the code for that package you just installed. This can also be shortened to just `npm i [package-name]`. As a helpful note, the `node_modules` folder should never be included in a GitHub respository due to its size. Whenever you clone a repo from GitHub (or any other version mangagement system), be sure to run the command `npm install` to go out and fetch all the packages defined in the `package.json` file, creating the `node_modules` directory automatically. You can also install a package at a specific version: `npm i [package-name]@1.10.1 --save`, for example.
+To install a package, simply run `npm install [package-name] --save`. The `save` flag will ensure the package and its version is logged in the `package.json` file. Since `npm` version 5, dependencies are saved by default, so `--save` may be omitted. You will also notice a new `node_modules` folder, containing the code for that package you just installed. This can also be shortened to just `npm i [package-name]`. As a helpful note, the `node_modules` folder should never be included in a GitHub repository due to its size. Whenever you clone a repo from GitHub (or any other version management system), be sure to run the command `npm install` to go out and fetch all the packages defined in the `package.json` file, creating the `node_modules` directory automatically. You can also install a package at a specific version: `npm i [package-name]@1.10.1 --save`, for example.
 
 Removing a package is similar to installing one: `npm remove [package-name]`.
 
@@ -610,7 +605,13 @@ It is also important to note that after making an HTTP Request, we'll receive a 
 A complete list of HTTP Status Codes can be found here: https://httpstatuses.com/
 
 ### MongoDB 
-MongoDB is a non-relational, NoSQL database similar to the Firebase Realtime Database. You will talk to the database via a Node package such as the MongoDB Native Driver or Mngoose.
+MongoDB is a non-relational, NoSQL database similar to the Firebase Real-time Database. You will talk to the database via a Node package such as the MongoDB Native Driver or Mongoose.
+
+In MongoDB, data is stored in JSON, which is quite different to relational databases such as MySQL, PostgreSQL, or SQLite. Both are called databases, with SQL Tables called Collections, SQL Table Rows called Documents, and SQL Table Columns called Fields.
+
+We will use the MongoDB Database in an upcoming article in this series when we create our very first Bookshelf API. The fundamental CRUD Operations listed above can be performed on a MongoDB Database.
+
+It's recommended that you read through the MongoDB Docs: https://docs.mongodb.com/manual/introduction/ to learn how to create a live database on an Atlas Cluster and make CRUD Operations to it with the MongoDB Native Driver. In the next article of this series, we will learn how to set up a local database and a cloud production database.
 
 ### Building a Command Line Node Application
 When building out an application, you will see many authors dump their entire code base at the beginning of the article, and then attempt to explain each line thereafter. In this text, I'll take a different approach. I'll explain my code line-by-line, building the app as we go. I won't worry about modularity or performance, I won't split the codebase into separate files, and I won't follow the DRY Principle or attempt to make the code reusable. When just learning, it is useful to make things as simple as possible, and so that is the approach I will take here.
@@ -651,7 +652,7 @@ To actually monitor network data, reload the page, and watch the tab be populate
 
 Once you click on that link, we can actually view HTTP specific information, such as the headers. Headers are sent in the response from the API (you can also, in some cases, send your own headers to the API, or you can even create your own custom headers (often prefixed with `x-`) to send back when building your own API), and just contain extra information that either the client or server may need.
 
-In this case, you can see that we made an HTTP GET Request to the API, and it responded with an HTTP Status 200 OK. You can also see that the data sent back was JSON, as listed under the "Response Headers" section.
+In this case, you can see that we made an HTTP GET Request to the API, and it responded with an HTTP Status 200 OK. You can also see that the data sent back was in JSON, as listed under the "Response Headers" section.
 
 <img src="complete-diagram.png" alt="Populated Chrome Dev Tools Network Tab">
 
@@ -822,7 +823,7 @@ axios.get(ENTIRE_API_URL)
     })
     .catch(error => console.log('Error', error));
 ```
-The parentheses around the `message` variable are not required, they just look nice - similar to when working with JSX in React. The blackslashes stop the template string from formatting a new line, and the `replace()` String prototype method gets rid of white space using Regular Expressions (RegEx). The `toFixed()` Number prototype methods rounds a float to a specific number of decimal places - in this case, two.
+The parentheses around the `message` variable are not required, they just look nice - similar to when working with JSX in React. The backslashes stop the template string from formatting a new line, and the `replace()` String prototype method gets rid of white space using Regular Expressions (RegEx). The `toFixed()` Number prototype methods rounds a float to a specific number of decimal places - in this case, two.
 
 With that, our final `app.js` looks as follows:
 
@@ -861,10 +862,9 @@ axios.get(ENTIRE_API_URL)
     })
     .catch(error => console.log('Error', error));
 ```
-
-### A word about CORS
-...
-
 ### Conclusion
-...
+We have learned a lot about how Node works in this article, from the differences between synchronous and asynchronous requests, to callback functions, to new ES6 features, events, package managers, APIs, JSON, and the HyperText Transfer Protocol, Non-Relational Databases, and we even built our own command line application utilizing most of that new found knowledge.
 
+In future articles in this series, we'll take an in-depth look at the Call Stack, the Event Loop, and Node APIs, we'll talk about Cross-Origin Resource Sharing (CORS), and we'll build a Full Stack Bookshelf API utilizing databases, endpoints, user authentication, tokens, server-side template rendering, and more.
+
+From here, start building your own Node applications, read the Node documentation, go out and find interesting APIs or Node Modules and implement them yourself. The world is your oyster and you have at your fingertips access to the largest network of knowledge on the planet - the Internet. Use it to your advantage.
