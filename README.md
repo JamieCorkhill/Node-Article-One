@@ -226,7 +226,7 @@ makeAPICall('/example').then(function(res) { // First response callback. Fires o
   console.log('Error:', err);
 });
 ```
-Noteice that we first call `makeAPICall('/example')`. That returns a promise, and so we attach a `.then()`. Inside that `then()`, we return a new call to `makeAPICall(...)`, which, in and of itself, as seen earlier, returns a promise, permitting us chain on a new `.then()` after the first.
+Notice that we first call `makeAPICall('/example')`. That returns a promise, and so we attach a `.then()`. Inside that `then()`, we return a new call to `makeAPICall(...)`, which, in and of itself, as seen earlier, returns a promise, permitting us chain on a new `.then()` after the first.
 
 Like above, we can restructure this for readability, and remove the failure callbacks for a generic `catch()` all clause. Then, we can follow the DRY Principle (Don't Repeat Yourself), and only have to implement error handling once.
 ```javascript
@@ -265,16 +265,28 @@ In old JavaScript, block scopes, such as those in `if`, `while`, `{}`. `for`, et
 function myFunction() {
   var num = 5;
   console.log(num); // 5
+  console.log('--');
   for(var i = 0; i < 10; i++)
   {
     var num = i;
-    console.log('--');
     console.log(num); //num becomes 0 - 9
   }
   console.log('--');
   console.log(num); // 9
   console.log(i); // 10
 }
+
+myFunction();
+```
+Output:
+```
+5
+---
+0
+1 2 3 ... 7 8 9
+---
+9
+10
 ```
 The important thing to notice here is that defining a new `var num` inside the `for` scope directly affected the `var num` outside and above the `for`. This is because `var`'s scope is always that of the enclosing function, and not a block.
 
@@ -290,7 +302,7 @@ function myFunction() {
   {
     let num = i;
     console.log('--');
-    console.log(num); //num becomes 0 - 9
+    console.log(num); // num becomes 0 - 9
   }
   console.log('--');
   console.log(num); // 5
@@ -299,8 +311,8 @@ function myFunction() {
 ```
 Looking at the `const` keyword, you can see that we attain an error if we try to reasign to it:
 ```javascript
-const c = 299792458;
-c = 10; //TypeError: Assignment to constant variable. 
+const c = 299792458; // Fact: The constant "c" is the speed of light in a vacuum in meters per second.
+c = 10; // TypeError: Assignment to constant variable. 
 ```
 Things become interesting when we assign a `const` variable to an object:
 ```javascript
