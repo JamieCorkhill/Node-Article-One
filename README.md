@@ -408,7 +408,7 @@ const aysncAddFunction = (a, b, callback) => callback(a + b); // This will retur
 When calling the function, we could pass an arrow function in for the callback:
 
 ```javascript
-asyncAddFunction(10, 12, sum => { // No parentheses cause we only take one argument.
+asyncAddFunction(10, 12, sum => { // No parentheses because we only take one argument.
   console.log(sum);
 }
 ```
