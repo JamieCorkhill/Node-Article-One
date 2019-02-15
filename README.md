@@ -19,7 +19,7 @@ Let's look at another example of a *synchronous* call that *blocks* a thread. Su
 
 <img src="SyncBlock.png" alt="Sync Blocking Ops">
 
-Allow me to note, it's important to recognize that not all synchronous calls are necessarily blocking. If an asynchronous operation can manage to complete without blocking the thread or causing a wait state, it was non-blocking. Most of the time, synchronous calls will be blocking, and the time they take to complete will depend on a variety of factors, such as the speed of the API's servers, the end user's internet connection download speed, etc.
+Allow me to note, it's important to recognize that not all synchronous calls are necessarily blocking. If a synchronous operation can manage to complete without blocking the thread or causing a wait state, it was non-blocking. Most of the time, synchronous calls will be blocking, and the time they take to complete will depend on a variety of factors, such as the speed of the API's servers, the end user's internet connection download speed, etc.
 
 In the case of the image above, we had to wait quite a while to retrieve the first results from API One. Thereafter, we had to wait equally as long to get a response from API Two. While waiting for both responses, the user would notice our application hang, and this is bad for User Experience.
 
@@ -57,7 +57,7 @@ var data = fs.readFileSync('/example.txt'); // The thread will be blocked here u
 If we were doing this asynchronously, we'd pass in a callback function which would fire when the the async operation was complete.
 ```javascript
 var fs = require('fs');
-var data = fs.readFile('/example.txt', function(err, data){ //Move on, this will fire when ready.
+var data = fs.readFile('/example.txt', function(err, data) { //Move on, this will fire when ready.
   if(err) return console.log('Error: ', err);
   console.log('Data: ', data);
 }); 
@@ -69,8 +69,8 @@ Like our `asyncAddFunction(...)`, the code behind the `fs.readFile(...)` functio
 
 ```javascript
 function readFile(path, callback) {
- //Behind the scenes code to read a file stream.
- //Data is defined here.
+ // Behind the scenes code to read a file stream.
+ // The data variable is defined here up here.
  callback(undefined, data); //Or, callback(err, undefined);
 }
 ```
@@ -78,6 +78,7 @@ Allow us to look at one last implementation of an async function call. This will
 
 ```javascript
 setTimeout(function {
+  // ...
 }, 1000);
 ```
 The `setTimeout(...)` method takes a callback function for the first parameter which will be fired after the number of milliseconds specified as the second argument has occurred.
@@ -632,7 +633,7 @@ If you want to see the finished code, visit the GitHub Repository HERE.
 
 If you want to see the refactored version of the code making use of some of the properties in the former paragraph, visit THIS GitHub Repository.
 
-Let us be clear about what we are building. We won't be concerned with user input, and so we won't make use of packages like [Yargs](https://www.npmjs.com/package/yargs). We also won't be building our own API. That will come in a later article in this series when we make use of the Express Web Application Framework. I take this approach as to not conflate Node.js with the power of Express and APIs since most tutorials do. Rather, I'll provide two methods (of many) by which to call and receive data from an external API, the first of which utilizes a third-party JavaScript library, and another which uses a native JavaScript method. The API we'll be calling is a Weather API, which we'll call from Node and dump its output to the terminal, perhaps with some formatting, known as "pretty-printing". I'll cover the entire process, including how to set up the API and attain API Key, the steps of which provide the correct results as of January 2019.
+Let us be clear about what we are building. We won't be concerned with user input, and so we won't make use of packages like [Yargs](https://www.npmjs.com/package/yargs). We also won't be building our own API. That will come in a later article in this series when we make use of the Express Web Application Framework. I take this approach as to not conflate Node.js with the power of Express and APIs since most tutorials do. Rather, I'll provide one method (of many) by which to call and receive data from an external API which utilizes a third-party JavaScript library. The API we'll be calling is a Weather API, which we'll acess from Node and dump its output to the terminal, perhaps with some formatting, known as "pretty-printing". I'll cover the entire process, including how to set up the API and attain API Key, the steps of which provide the correct results as of January 2019.
 
 We'll be using the OpenWeatherMap API for this project, so to get started, navigate to https://home.openweathermap.org/users/sign_up and create an account with the form. Once logged in, find the API Keys menu item on the dashboard page, located at https://home.openweathermap.org/api_keys. If you just created an account, you'll have to pick a name for your API Key and hit "Generate". It could take at least 2 hours for your new API Key to be functional and associated with your account.
 
